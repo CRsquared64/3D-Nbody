@@ -18,7 +18,7 @@ class Body:
         self.trail = []
 
         self.xv = 0
-        self.xy = 0
+        self.yv = 0
 
     def force(self, obj):
         obj_x = obj.x
@@ -44,4 +44,17 @@ class Body:
                 continue
 
             force_x, force_y = self.force(body)
+            total_force_x += force_x
+            total_force_y += force_y
+
+            self.xv = total_force_x / self.mass * self.TIMESTEP
+            self.yv = total_force_y / self.mass * self.TIMESTEP
+
+            self.x += self.xv * self.TIMESTEP
+            self.y += self.yv * self.TIMESTEP
+
+            self.trail.append((self.x,self.y))
+
+
+
 bodies = [1,2,3]
