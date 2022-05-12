@@ -52,8 +52,8 @@ class Body:
             total_force_x += force_x
             total_force_y += force_y
 
-            self.xv = total_force_x / self.mass * self.TIMESTEP
-            self.yv = total_force_y / self.mass * self.TIMESTEP
+            self.xv += total_force_x / self.mass * self.TIMESTEP
+            self.yv += total_force_y / self.mass * self.TIMESTEP
 
             self.x += self.xv * self.TIMESTEP
             self.y += self.yv * self.TIMESTEP
@@ -77,8 +77,8 @@ def run():
     WIN.fill((0,0,0))
 
     BODY_1 = Body(0, 0, 30, 1.98892 * 10 ** 30, (255,0,0))
-    BODY_2 = Body(-1 * Body.AU, 0, 16, 5.9742 * 10 ** 24,(0,0,255))
-    BODY_2.y.
+    BODY_2 = Body(-1 * Body.AU, 0, 16, 5.9742 * 10**24,(0,0,255))
+    BODY_2.yv = 29.783 * 1000
     bodies = [BODY_1, BODY_2]
     while run:
         clock.tick(60)
