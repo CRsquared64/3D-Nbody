@@ -63,6 +63,16 @@ class Body:
     def plot(self, win):
         x = self.x * self.SCALE + WIDTH / 2
         y = self.y * self.SCALE + HEIGHT / 2
+
+        if len(self.trail) > 2:
+            update = []
+            for point in self.trail:
+                x, y = point
+                x = x * self.SCALE + WIDTH / 2
+                y = y * self.SCALE + HEIGHT / 2
+                update.append((x,y))
+
+            pygame.draw.lines(win, self.colour, False, update, 2)
         pygame.draw.circle(win,self.colour, (x,y), self.radius)
 
 
@@ -82,6 +92,7 @@ def run():
     bodies = [BODY_1, BODY_2]
     while run:
         clock.tick(60)
+        WIN.fill((0, 0, 0))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
