@@ -1,7 +1,7 @@
 import time
 import math
 import pygame
-
+import random
 pygame.init()
 
 WIDTH, HEIGHT = 800,800
@@ -10,8 +10,8 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 class Body:
     G = 6.67428e-11
     AU = 149.6e6 * 1000
-    TIMESTEP = 36000 * 24
-    SCALE = 250 / AU
+    TIMESTEP = 3600 * 24
+    SCALE = 125 / AU
 
     def __init__(self, x, y, radius, mass, colour):
         self.x = x
@@ -86,10 +86,16 @@ def run():
     clock = pygame.time.Clock()
     WIN.fill((0,0,0))
 
-    BODY_1 = Body(0, 0, 30, 1.98892 * 10 ** 30, (255,0,0))
-    BODY_2 = Body(-1 * Body.AU, 0, 16, 5.9742 * 10**24,(0,0,255))
-    BODY_2.yv = 29.783 * 1000
-    bodies = [BODY_1, BODY_2]
+    SUN = Body(0, 0, 15, 1.98892 * 10 ** 30, (255,165,0))
+    EARTH = Body(-1 * Body.AU, 0, 4, 5.9742 * 10**24,(0,0,255))
+    EARTH.yv = 29.783 * 1000
+    MARS = Body(-1.524 * Body.AU, 0, 3, 6.39 * 10 ** 23, (255,255,0))
+    MARS.yv = 24.077 * 1000
+    MOON = Body(-1.01 * Body.AU, -1, 4, 7.34767309 * 5 ** 22, (50,50,50))
+    MOON.yv = 29.783 * 1000
+
+    #B_hole = Body(0,0, 30, 1.98892e+36, (0,0,0))
+    bodies = [EARTH, SUN]
     while run:
         clock.tick(60)
         WIN.fill((0, 0, 0))
