@@ -35,3 +35,13 @@ class Body:
         force_y = math.sin(angle) * force
 
         return force_x, force_y
+
+    def position(self, bodies):
+        total_force_x = total_force_y = 0
+
+        for body in bodies:
+            if self == body:
+                continue
+
+            force_x, force_y = self.force(body)
+bodies = [1,2,3]
