@@ -5,15 +5,15 @@ from astropy import constants as const
 
 class Body:
     G = const.G
-    AU = const.AU
+    AU = const.au
     TIMESTEP = 3600 * 24
 
-    def __init__(self, x, y, radius, mass, color):
+    def __init__(self, x, y, radius, mass):
         self.x = x
         self.y = y
         self.radius = radius
         self.mass = mass
-        self.color = color
+
 
         self.trail = []
 
@@ -54,7 +54,15 @@ class Body:
             self.y += self.yv * self.TIMESTEP
 
             self.trail.append((self.x,self.y))
+    def plot(self):
 
 
 
-bodies = [1,2,3]
+
+
+def run():
+    BODY_1 = Body(0,0,30,1.98892*10**30)
+    bodies = [BODY_1]
+    for body in bodies:
+        print(body)
+run()
