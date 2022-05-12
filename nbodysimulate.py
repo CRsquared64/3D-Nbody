@@ -1,13 +1,17 @@
+import time
 import math
-import matplotlib.pyplot as plt
-from matplotlib.patches import Circle
+import pygame
 
+pygame.init()
+
+WIDTH, HEIGHT = 800,800
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 class Body:
     G = 6.67428e-11
-    AU = 149.6e6
-    TIMESTEP = 3600 * 24
-    SCALE = 2.5*10**-120
+    AU = 149.6e6 * 1000
+    TIMESTEP = 36000 * 24
+    SCALE = 250 / AU
 
     def __init__(self, x, y, radius, mass, colour):
         self.x = x
@@ -56,27 +60,40 @@ class Body:
 
             self.trail.append((self.x, self.y))
 
-    def plot(self, ax):
-        x = self.x * self.SCALE
-        y = self.y * self.SCALE
-        print(x)
-        print(y)
+    def plot(self, win):
+        x = self.x * self.SCALE + WIDTH / 2
+        y = self.y * self.SCALE + HEIGHT / 2
+        pygame.draw.circle(win,self.colour, (x,y), self.radius)
 
-        ax.add_artist(Circle(xy=(x, y), radius=self.radius,color=self.colour))
-        ax.margins(1000, 1000)
+
+
+
 
 
 
 def run():
-    BODY_1 = Body(0, 0, 30, 1.98892 * 10 ** 30, (1,0,0))
-    BODY_2 = Body(-1 * 6.67428e-11, 0, 16, 5.9742 * 10 ** 24,(0,1,0))
+    run = True
+    clock = pygame.time.Clock()
+    WIN.fill((0,0,0))
+
+    BODY_1 = Body(0, 0, 30, 1.98892 * 10 ** 30, (255,0,0))
+    BODY_2 = Body(-1 * Body.AU, 0, 16, 5.9742 * 10 ** 24,(0,0,255))
+    BODY_2.y.
     bodies = [BODY_1, BODY_2]
-    fig = plt.figure()
-    ax = fig.add_subplot(111, aspect='equal')
-    for body in bodies:
-        body.position(bodies)
-        body.plot(ax)
-    plt.show()
+    while run:
+        clock.tick(60)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+        for body in bodies:
+            body.position(bodies)
+            body.plot(WIN)
+        pygame.display.update()
+    pygame.quit()
+
+
+
 
 
 run()
