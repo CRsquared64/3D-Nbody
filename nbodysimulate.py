@@ -1,19 +1,20 @@
 import math
-import matplotlib
-from astropy import constants as const
+import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
 
 
 class Body:
-    G = const.G
-    AU = const.au
+    G = 6.67428e-11
+    AU = 149.6e6
     TIMESTEP = 3600 * 24
+    SCALE = 2.5*10**-120
 
-    def __init__(self, x, y, radius, mass):
+    def __init__(self, x, y, radius, mass, colour):
         self.x = x
         self.y = y
         self.radius = radius
         self.mass = mass
-
+        self.colour = colour
 
         self.trail = []
 
@@ -53,16 +54,29 @@ class Body:
             self.x += self.xv * self.TIMESTEP
             self.y += self.yv * self.TIMESTEP
 
-            self.trail.append((self.x,self.y))
-    def plot(self):
+            self.trail.append((self.x, self.y))
 
+    def plot(self, ax):
+        x = self.x * self.SCALE
+        y = self.y * self.SCALE
+        print(x)
+        print(y)
 
+        ax.add_artist(Circle(xy=(x, y), radius=self.radius,color=self.colour))
+        ax.margins(1000, 1000)
 
 
 
 def run():
-    BODY_1 = Body(0,0,30,1.98892*10**30)
-    bodies = [BODY_1]
+    BODY_1 = Body(0, 0, 30, 1.98892 * 10 ** 30, (1,0,0))
+    BODY_2 = Body(-1 * 6.67428e-11, 0, 16, 5.9742 * 10 ** 24,(0,1,0))
+    bodies = [BODY_1, BODY_2]
+    fig = plt.figure()
+    ax = fig.add_subplot(111, aspect='equal')
     for body in bodies:
-        print(body)
+        body.position(bodies)
+        body.plot(ax)
+    plt.show()
+
+
 run()
