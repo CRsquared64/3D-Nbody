@@ -3,7 +3,7 @@ import math
 import pygame
 import random
 pygame.init()
-from numba import jit
+
 
 WIDTH, HEIGHT = 800,800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -11,8 +11,8 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 class Body:
     G = 6.67428e-11
     AU = 149.6e6 * 1000
-    TIMESTEP = 100 * 24
-    SCALE = 200 / AU
+    TIMESTEP = 360 * 12
+    SCALE = 100 / AU
 
     def __init__(self, x, y, radius, mass, colour):
         self.x = x
@@ -26,7 +26,7 @@ class Body:
         self.xv = 0
         self.yv = 0
 
-    @jit()
+
     def force(self, obj):
         obj_x = obj.x
         obj_y = obj.y
@@ -43,7 +43,7 @@ class Body:
 
         return force_x, force_y
 
-    @jit()
+
     def position(self, bodies):
         total_force_x = total_force_y = 0
 
@@ -88,20 +88,21 @@ def run():
     run = True
     clock = pygame.time.Clock()
 
-    SUN = Body(0, 0, 30, 1.98892 * 10 ** 30, (255,165,0))
-    EARTH = Body(-1 * Body.AU, 0, 16, 5.9742 * 10**24,(0,0,255))
+    SUN = Body(0, 0, 15, 1.98892 * 10 ** 30, (255,165,0))
+    EARTH = Body(-1 * Body.AU, 2, 8, 5.9742 * 10**24,(0,0,255))
     EARTH.yv = 29.783 * 1000
-    MARS = Body(-1.524 * Body.AU, 0, 12, 6.39 * 10**23, (255,25,0))
+    MARS = Body(-1.524 * Body.AU, 0, 6, 6.39 * 10**23, (255,25,0))
     MARS.yv = 24.077 * 1000
-    VENUS = Body(0.723 * Body.AU, 0, 14, 4.865 * 10**24, (255,255,255))
+    VENUS = Body(0.723 * Body.AU, 0, 7, 4.865 * 10**24, (255,255,255))
     VENUS.yv = -35.02 * 1000
 
-    bodies = [SUN, EARTH, MARS, VENUS]
+    asteroid = Body(1 * Body.AU, 2, 2, 5 * 10**17, (100,100,100))
+    asteroid.yv = 18.40 * 1000
+
+    bodies = [SUN, EARTH, MARS, VENUS, asteroid]
     while run:
         clock.tick(120)
         WIN.fill((0, 0, 0))
-        fps = str(int(clock.get_fps()))
-        print(fps)
 
 
         for event in pygame.event.get():
