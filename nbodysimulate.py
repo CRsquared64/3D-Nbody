@@ -84,7 +84,7 @@ class Body:
 
 
 
-def run():
+def run_SOL():
     run = True
     clock = pygame.time.Clock()
 
@@ -118,4 +118,4 @@ def run():
 
 
 
-run()
+run_SOL()
