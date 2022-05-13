@@ -11,7 +11,7 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 class Body:
     G = 6.67428e-11
     AU = 149.6e6 * 1000
-    TIMESTEP = 360 * 12
+    TIMESTEP = 100 *24
     SCALE = 100 / AU
 
     def __init__(self, x, y, radius, mass, colour):
@@ -96,12 +96,16 @@ def run_SOL():
     VENUS = Body(0.723 * Body.AU, 0, 7, 4.865 * 10**24, (255,255,255))
     VENUS.yv = -35.02 * 1000
 
+    MOON = Body(-1.02 * Body.AU, 2, 2, 1.73477e22, (150,150,150))
+    MOON.yv = 2.9783e4
+
     asteroid = Body(1 * Body.AU, 2, 2, 5 * 10**17, (100,100,100))
     asteroid.yv = 18.40 * 1000
 
-    bodies = [SUN, EARTH, MARS, VENUS, asteroid]
+    bodies = [SUN,MOON, MARS, VENUS, EARTH, asteroid]
+    i = 0
     while run:
-        clock.tick(120)
+        clock.tick(120000000)
         WIN.fill((0, 0, 0))
 
 
@@ -111,11 +115,33 @@ def run_SOL():
         for body in bodies:
             body.position(bodies)
             body.plot(WIN)
+            i = i + 1
         pygame.display.update()
     pygame.quit()
 
 
 
+def Run_galaxu():
+    run = True
+    clock = pygame.time.Clock()
+
+    B_HOLE = Body(0,0, 30, 2*10*30, (0,0,0))
+    bodies = [B_HOLE]
+    i = 0
+    while run:
+        clock.tick(1200)
+        WIN.fill((25, 25, 25))
 
 
-run_SOL()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+        for body in bodies:
+            body.position(bodies)
+            body.plot(WIN)
+            i = i + 1
+        pygame.display.update()
+    pygame.quit()
+
+
+Run_galaxu()
