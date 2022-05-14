@@ -5,13 +5,13 @@ import random
 pygame.init()
 
 
-WIDTH, HEIGHT = 800,800
+WIDTH, HEIGHT = 1200,1200
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 class Body:
     G = 6.67428e-11
     AU = 149.6e6 * 1000
-    TIMESTEP = 100 *24
+    TIMESTEP = 360 *12
     SCALE = 100 / AU
 
     def __init__(self, x, y, radius, mass, colour):
@@ -82,13 +82,12 @@ class Body:
 
 
 
-
-
 def run_SOL():
     run = True
     clock = pygame.time.Clock()
 
     SUN = Body(0, 0, 15, 1.98892 * 10 ** 30, (255,165,0))
+    SUN2 = Body(2 * Body.AU, 2, 15, 1.98892 * 10 ** 30, (255, 165, 0))
     EARTH = Body(-1 * Body.AU, 2, 8, 5.9742 * 10**24,(0,0,255))
     EARTH.yv = 29.783 * 1000
     MARS = Body(-1.524 * Body.AU, 0, 6, 6.39 * 10**23, (255,25,0))
@@ -99,13 +98,19 @@ def run_SOL():
     MOON = Body(-1.02 * Body.AU, 2, 2, 1.73477e22, (150,150,150))
     MOON.yv = 2.9783e4
 
-    asteroid = Body(1 * Body.AU, 2, 2, 5 * 10**17, (100,100,100))
+    asteroid = Body(1 * Body.AU, 2, 1, 5 * 10**17, (100,100,100))
     asteroid.yv = 18.40 * 1000
 
-    bodies = [SUN,MOON, MARS, VENUS, EARTH, asteroid]
+    MERCURY = Body(0.387 * Body.AU, 0, 4, 3.30 * 10**23 ,(150,150,150))
+    MERCURY.yv = -47.4 * 1000
+
+    JUPITER = Body(-3.2 * Body.AU, 0, 10, 1.9 *10 ** 27, (255,255,220))
+    JUPITER.yv = 24.236 * 1000
+
+    bodies = [SUN, SUN2, MARS, VENUS, MERCURY, EARTH, asteroid,]
     i = 0
     while run:
-        clock.tick(120000000)
+        clock.tick(60)
         WIN.fill((0, 0, 0))
 
 
@@ -125,11 +130,23 @@ def Run_galaxu():
     run = True
     clock = pygame.time.Clock()
 
-    B_HOLE = Body(0,0, 30, 2*10*30, (0,0,0))
-    bodies = [B_HOLE]
-    i = 0
+    B_HOLE = Body(2 * Body.AU,0, 30, 2*10**30, (0,0,0))
+
+
+    B_HOLE2 = Body(0, 0, 30, 2 * 10 **30, (9, 0, 0))
+
+    rando = Body(1 * Body.AU, 0,12,  2*10**24, (200,200,255))
+
+    bodies = [B_HOLE2]
+
+    for i in range(50):
+        generated = Body((random.uniform(-5,5) * Body.AU), (random.uniform(-5,5) * Body.AU), 10, 2*10**24, (200,200,255))
+        generated.yv = random.uniform(-50, 50) * 1000
+        bodies.append(generated)
+
+
     while run:
-        clock.tick(1200)
+        clock.tick(120)
         WIN.fill((25, 25, 25))
 
 
@@ -139,7 +156,6 @@ def Run_galaxu():
         for body in bodies:
             body.position(bodies)
             body.plot(WIN)
-            i = i + 1
         pygame.display.update()
     pygame.quit()
 
