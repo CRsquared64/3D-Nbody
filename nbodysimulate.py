@@ -1,12 +1,14 @@
 import time
 import math
+
 import pygame
+from pygame.locals import *
 import random
 pygame.init()
 
 
-WIDTH, HEIGHT = 1000,1000
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+WIDTH, HEIGHT = 2240,1260
+WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
 
 class Body:
     G = 6.67428e-11
@@ -73,7 +75,7 @@ class Body:
                 x, y = point
                 x = x * self.SCALE + WIDTH / 2
                 y = y * self.SCALE + HEIGHT / 2
-                update.append((x,y))
+                #update.append((x,y))
 
             #pygame.draw.lines(win, self.colour, False, update, 2)
         pygame.draw.circle(win,self.colour, (x,y), self.radius)
@@ -108,7 +110,10 @@ def run_SOL():
     JUPITER = Body(-5.203 * Body.AU, 0, 8, 1.9 *10 ** 27, (125,84,84))
     JUPITER.yv = 13.07 * 1000
 
-    bodies = [SUN, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER]
+    SATURN = Body(-9.5 * Body.AU, 0, 6, 5.683 * 10 ** 26, (255,253,208))
+    SATURN.yv = 9.69 * 1000
+
+    bodies = [SUN, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN]
     i = 0
     while run:
         clock.tick(2400)
