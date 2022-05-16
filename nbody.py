@@ -6,6 +6,8 @@ from pygame.locals import *
 import random
 pygame.init()
 
+WIDTH, HEIGHT = 2240,1260
+WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
 
 
 
