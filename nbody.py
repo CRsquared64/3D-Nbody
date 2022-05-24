@@ -4,12 +4,10 @@ import math
 import pygame
 from pygame.locals import *
 import random
-pygame.init()
+
+
 
 WIDTH, HEIGHT = 1920, 1080
-WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
-
-
 
 class Nbody:
     G = 6.67428e-11
@@ -29,7 +27,6 @@ class Nbody:
         self.xv = 0
         self.yv = 0
 
-
     def force(self, obj):
         obj_x = obj.x
         obj_y = obj.y
@@ -45,7 +42,6 @@ class Nbody:
         force_y = math.sin(angle) * force
 
         return force_x, force_y
-
 
     def position(self, bodies):
         total_force_x = total_force_y = 0
@@ -66,6 +62,7 @@ class Nbody:
 
             self.trail.append((self.x, self.y))
 
+    """
     def plot(self, win):
         x = self.x * self.SCALE + WIDTH / 2
         y = self.y * self.SCALE + HEIGHT / 2
@@ -80,9 +77,16 @@ class Nbody:
 
             #pygame.draw.lines(win, self.colour, False, update, 2)
         pygame.draw.circle(win,self.colour, (x,y), self.radius)
+        """
 
+    def get_draw_pos(self):
+        x = self.x * self.SCALE + WIDTH / 2
+        y = self.y * self.SCALE + HEIGHT / 2
 
-
-
-
-
+        if len(self.trail) > 2:
+            update = []
+            for point in self.trail:
+                x, y = point
+                x = x * self.SCALE + WIDTH / 2
+                y = y * self.SCALE + HEIGHT / 2
+        return x,y
