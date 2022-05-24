@@ -6,7 +6,6 @@ import nbody
 WIDTH, HEIGHT = 1920, 1080
 
 
-
 def run_SOL():
     run = True
     clock = pygame.time.Clock()
@@ -42,7 +41,7 @@ def run_SOL():
 
     bodies = [SUN, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN, STARMAN]
 
-    poses = [[] for i in range (len(bodies))]
+    poses = [[] for i in range(len(bodies))]
 
     for i in range(1000):
         for n, body in enumerate(bodies):
@@ -51,46 +50,13 @@ def run_SOL():
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
     for i in range(len(poses[0])):
         clock.tick(240)
-        WIN.fill((0, 0, 0))
+        WIN.fill((5, 5, 5))
         for n, body in enumerate(bodies):
             x, y = poses[n][i]
+            #pygame.draw.lines(WIN, body.colour, False, body.update, 2)
             pygame.draw.circle(WIN, body.colour, (x, y), body.radius)
         pygame.display.update()
 
-
-    pygame.quit()
-
-
-def Run_galaxu():
-    run = True
-    clock = pygame.time.Clock()
-
-    B_HOLE = nbody.Nbody(2 * nbody.Nbody.AU, 0, 20, 2 * 10 ** 30, (0, 0, 0))
-
-    B_HOLE2 = nbody.Nbody(0, 0, 12, 2 * 10 ** 30, (9, 0, 0))
-
-    bodies = [B_HOLE2]
-
-    for i in range(5, 15):
-        x = (-1 + i * 0.15)
-        y = 0
-
-        generated = nbody.Nbody(x * nbody.Nbody.AU, y * nbody.Nbody.AU, 5, 0.01 * 10 ** 24, (200, 200, 255))
-        generated.yv = 25 * 1000
-        bodies.append(generated)
-
-    while run:
-        clock.tick(120)
-        WIN.fill((25, 25, 25))
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-
-        for nbody.Nbody in bodies:
-            nbody.Nbody.position(bodies)
-            nbody.Nbody.plot(WIN)
-        pygame.display.update()
     pygame.quit()
 
 
