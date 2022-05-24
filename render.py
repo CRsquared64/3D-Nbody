@@ -3,7 +3,7 @@ from pygame.locals import *
 
 import nbody
 
-WIDTH, HEIGHT = 800,800
+WIDTH, HEIGHT = 1920,1080
 WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
 
 def run_SOL():
@@ -42,16 +42,21 @@ def run_SOL():
     bodies = [SUN, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN, STARMAN]
     i = 0
     while run:
-        clock.tick(120)
-        WIN.fill((25, 25, 25))
+        clock.tick(240)
+        for i in range(1000):
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-        for nbody.Nbody in bodies:
-            nbody.Nbody.position(bodies)
-            nbody.Nbody.plot(WIN)
-        pygame.display.update()
+            WIN.fill((0, 0, 0))
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+            for nbody.Nbody in bodies:
+                nbody.Nbody.position(bodies)
+                nbody.Nbody.plot(WIN)
+        run = False
+    pygame.display.update()
+
+
     pygame.quit()
 
 
