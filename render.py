@@ -3,7 +3,7 @@ from pygame.locals import *
 
 import nbody
 
-WIDTH, HEIGHT = 2240,1260
+WIDTH, HEIGHT = 800,800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
 
 def run_SOL():
@@ -35,14 +35,15 @@ def run_SOL():
     SATURN = nbody.Nbody(-9.5 * nbody.Nbody.AU, 0, 6, 5.683 * 10 ** 26, (255,253,208))
     SATURN.yv = 9.69 * 1000
 
-    bodies = [SUN, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN]
+    STARMAN = nbody.Nbody(1.264 * nbody.Nbody.AU, 5, 1, 1315.418, (0,255,25))
+    STARMAN.yv = -27.67 * 1000
+    STARMAN.xv = 6.82 * 1000
+
+    bodies = [SUN, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN, STARMAN]
     i = 0
     while run:
-        clock.tick(2400)
-        WIN.fill((0, 0, 0))
-        fps = int(clock.get_fps())
-
-
+        clock.tick(120)
+        WIN.fill((25, 25, 25))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -50,7 +51,6 @@ def run_SOL():
         for nbody.Nbody in bodies:
             nbody.Nbody.position(bodies)
             nbody.Nbody.plot(WIN)
-
         pygame.display.update()
     pygame.quit()
 
