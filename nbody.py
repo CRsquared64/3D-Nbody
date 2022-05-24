@@ -5,6 +5,7 @@ import pygame
 from pygame.locals import *
 import random
 
+import numba
 
 
 WIDTH, HEIGHT = 1920, 1080
@@ -12,7 +13,7 @@ WIDTH, HEIGHT = 1920, 1080
 class Nbody:
     G = 6.67428e-11
     AU = 149.6e6 * 1000
-    TIMESTEP = 300 * 12
+    TIMESTEP = 100 * 24
     SCALE = 75 / AU
 
     def __init__(self, x, y, radius, mass, colour):
@@ -84,9 +85,10 @@ class Nbody:
         y = self.y * self.SCALE + HEIGHT / 2
 
         if len(self.trail) > 2:
-            update = []
+            self.update = []
             for point in self.trail:
                 x, y = point
                 x = x * self.SCALE + WIDTH / 2
                 y = y * self.SCALE + HEIGHT / 2
+                self.update.append((x,y))
         return x,y
