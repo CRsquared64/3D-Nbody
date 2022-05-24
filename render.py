@@ -7,6 +7,7 @@ WIDTH, HEIGHT = 1920, 1080
 
 
 def run_SOL():
+    cycles = 10000
     run = True
     clock = pygame.time.Clock()
 
@@ -42,9 +43,10 @@ def run_SOL():
     bodies = [SUN, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN, STARMAN]
 
     poses = [[] for i in range(len(bodies))]
+    amount = len(bodies) * cycles
 
-    with tqdm(total=1000) as pb:
-        for i in range(1000):
+    with tqdm(total=amount) as pb:
+        for i in range(cycles):
             for n, body in enumerate(bodies):
                 body.position(bodies)
                 poses[n].append(body.get_draw_pos())
