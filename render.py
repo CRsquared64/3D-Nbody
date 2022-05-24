@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-
+from tqdm import tqdm
 import nbody
 
 WIDTH, HEIGHT = 1920, 1080
@@ -43,10 +43,12 @@ def run_SOL():
 
     poses = [[] for i in range(len(bodies))]
 
-    for i in range(1000):
-        for n, body in enumerate(bodies):
-            body.position(bodies)
-            poses[n].append(body.get_draw_pos())
+    with tqdm(total=1000) as pb:
+        for i in range(1000):
+            for n, body in enumerate(bodies):
+                body.position(bodies)
+                poses[n].append(body.get_draw_pos())
+                pb.update(1)
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
     for i in range(len(poses[0])):
         clock.tick(240)
