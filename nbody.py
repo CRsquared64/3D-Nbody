@@ -6,7 +6,7 @@ from pygame.locals import *
 import random
 pygame.init()
 
-WIDTH, HEIGHT = 2240,1260
+WIDTH, HEIGHT = 800,800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
 
 
@@ -14,7 +14,7 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
 class Nbody:
     G = 6.67428e-11
     AU = 149.6e6 * 1000
-    TIMESTEP = 360 * 12
+    TIMESTEP = 300 * 12
     SCALE = 75 / AU
 
     def __init__(self, x, y, radius, mass, colour):
@@ -76,9 +76,9 @@ class Nbody:
                 x, y = point
                 x = x * self.SCALE + WIDTH / 2
                 y = y * self.SCALE + HEIGHT / 2
-                update.append((x,y))
+                #update.append((x,y))
 
-            pygame.draw.lines(win, self.colour, False, update, 2)
+            #pygame.draw.lines(win, self.colour, False, update, 2)
         pygame.draw.circle(win,self.colour, (x,y), self.radius)
 
 
