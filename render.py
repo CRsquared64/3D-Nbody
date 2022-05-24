@@ -2,12 +2,14 @@ import pygame
 from pygame.locals import *
 from tqdm import tqdm
 import nbody
+from multiprocessing import Process
+import pickle
 
 WIDTH, HEIGHT = 1920, 1080
 
 
 def run_SOL():
-    cycles = 10000
+    cycles = 2000
     run = True
     clock = pygame.time.Clock()
 
@@ -51,6 +53,8 @@ def run_SOL():
                 body.position(bodies)
                 poses[n].append(body.get_draw_pos())
                 pb.update(1)
+    with open('nb_run.dat', 'wb') as handle:
+        pickle.dump(poses, handle, protocol=pickle.HIGHEST_PROTOCOL)
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
     for i in range(len(poses[0])):
         clock.tick(240)
@@ -64,4 +68,7 @@ def run_SOL():
     pygame.quit()
 
 
-run_SOL()
+if __name__ == '__main__':
+    p = Process(target=run_SOL(), args=())
+    p.start()
+    p.join()
