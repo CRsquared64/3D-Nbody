@@ -53,8 +53,8 @@ def run_SOL():
                 body.position(bodies)
                 poses[n].append(body.get_draw_pos())
                 pb.update(1)
-    with open('nb_run.dat', 'wb') as handle:
-        pickle.dump(poses, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    #with open('nb_run.dat', 'wb') as handle:
+        #pickle.dump(poses, handle, protocol=pickle.HIGHEST_PROTOCOL)
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
     for i in range(len(poses[0])):
         clock.tick(240)
@@ -64,6 +64,7 @@ def run_SOL():
             #pygame.draw.lines(WIN, body.colour, False, body.update, 2)
             pygame.draw.circle(WIN, body.colour, (x, y), body.radius)
         pygame.display.update()
+        pygame.image.save(WIN, f'run/nb_frame{i}.jpg')
 
     pygame.quit()
 
