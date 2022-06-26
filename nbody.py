@@ -82,10 +82,10 @@ class Nbody:
         y = self.y * self.SCALE + HEIGHT / 2
 
         if len(self.trail) > 2:
-            self.update = []
+            #self.update = []
             for point in self.trail:
                 x, y = point
                 x = x * self.SCALE + WIDTH / 2
                 y = y * self.SCALE + HEIGHT / 2
-                self.update.append((x,y))
+                #self.update.append((x,y))
         return x,y

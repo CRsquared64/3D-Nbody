@@ -8,7 +8,10 @@ import os
 import cv2
 import glob
 
-
+try:
+    os.mkdir('run')
+except:
+    pass
 
 WIDTH, HEIGHT = 1920, 1080
 FPS = 60
@@ -16,7 +19,7 @@ FPS = 60
 pygame.init()
 
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-video = cv2.VideoWriter('video.mp4', fourcc, 1, (WIDTH, HEIGHT))
+video = cv2.VideoWriter('video.mp4', fourcc, 60, (WIDTH, HEIGHT))
 
 
 
@@ -26,10 +29,10 @@ def run_SOL():
     run = True
     clock = pygame.time.Clock()
 
-    SUN = nbody.Nbody(0, 0, 12, 1.98892 * 10 ** 30, (255, 165, 0))
+    SUN = nbody.Nbody(0, 0, 10, 1.98892 * 10 ** 30, (255, 165, 0))
     SUN2 = nbody.Nbody(2 * nbody.Nbody.AU, 2, 8, 1.98892 * 10 ** 30, (255, 165, 0))
     SUN2.yv = 200.236 * 1000
-    EARTH = nbody.Nbody(-1 * nbody.Nbody.AU, 2, 4, 5.9742 * 10 ** 24, (0, 0, 255))
+    EARTH = nbody.Nbody(-1 * nbody.Nbody.AU, 2, 5, 5.9742 * 10 ** 24, (0, 0, 255))
     EARTH.yv = 29.783 * 1000
     MARS = nbody.Nbody(-1.524 * nbody.Nbody.AU, 0, 3, 6.39 * 10 ** 23, (255, 25, 0))
     MARS.yv = 24.077 * 1000
@@ -60,20 +63,22 @@ def run_SOL():
     poses = [[] for i in range(len(bodies))]
     amount = len(bodies) * cycles
 
+    print("Calculating Positions")
+
     with tqdm(total=amount) as pb:
         for i in range(cycles):
             for n, body in enumerate(bodies):
                 body.position(bodies)
                 poses[n].append(body.get_draw_pos())
                 pb.update(1)
-
+    print("Rendering Frames")
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
     for i in range(len(poses[0])):
-        clock.tick(60)
+        clock.tick(240)
         WIN.fill((5, 5, 5))
         for n, body in enumerate(bodies):
             x, y = poses[n][i]
-            pygame.draw.lines(WIN, body.colour, False, body.update, 2)
+            #pygame.draw.lines(WIN, body.colour, False, body.update, 2)
             pygame.draw.circle(WIN, body.colour, (x, y), body.radius)
         pygame.image.save(WIN, f'run/nb_frame{i}.jpg')
        #pygame.display.update()
@@ -84,8 +89,8 @@ def run_SOL():
 
 if __name__ == '__main__':
     run_SOL()
-    filenames = glob.glob("run/*.jpg")
-    filenames.sort()
+    filenames = sorted(glob.glob("run/*.jpg"), key=os.path.getmtime)
+
     images = [cv2.imread(img) for img in filenames]
     img_amount = len(images)
     with tqdm(total=img_amount) as pb:
