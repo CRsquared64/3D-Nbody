@@ -28,6 +28,7 @@ class Nbody:
         obj_dist_x = obj_x - self.x
         obj_dist_y = obj_y - self.y
 
+
         dist = math.sqrt(obj_dist_x ** 2 + obj_dist_y ** 2)
         force = self.G * self.mass * obj.mass / dist ** 2
 
@@ -40,6 +41,8 @@ class Nbody:
 
     def position(self, bodies):
         total_force_x = total_force_y = 0
+
+
 
         for body in bodies:
             if self == body:

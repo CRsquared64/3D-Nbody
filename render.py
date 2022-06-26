@@ -3,13 +3,20 @@ from pygame.locals import *
 from tqdm import tqdm
 import nbody
 from multiprocessing import Process
-import pickle
+import os
+import os
+import moviepy.video.io.ImageSequenceClip
+
+
 
 WIDTH, HEIGHT = 1920, 1080
+FPS = 60
+
+pygame.init()
 
 
 def run_SOL():
-    cycles = 4000
+    cycles = 1000
     run = True
     clock = pygame.time.Clock()
 
@@ -53,8 +60,7 @@ def run_SOL():
                 body.position(bodies)
                 poses[n].append(body.get_draw_pos())
                 pb.update(1)
-    with open('nb_run.dat', 'wb') as handle:
-        pickle.dump(poses, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
     for i in range(len(poses[0])):
         clock.tick(240)
@@ -63,7 +69,7 @@ def run_SOL():
             x, y = poses[n][i]
             #pygame.draw.lines(WIN, body.colour, False, body.update, 2)
             pygame.draw.circle(WIN, body.colour, (x, y), body.radius)
-        # pygame.image.save(WIN, f'run/nb_frame{i}.jpg')
+        pygame.image.save(WIN, f'run/nb_frame{i}.jpg')
         pygame.display.update()
 
 
@@ -71,6 +77,10 @@ def run_SOL():
 
 
 if __name__ == '__main__':
-    p = Process(target=run_SOL(), args=())
-    p.start()
-    p.join()
+    run_SOL()
+    image_files = [os.path.join('run', img)
+                   for img in os.listdir('run')
+                   if img.endswith(".jpg")]
+    clip = moviepy.video.io.ImageSequenceClip.ImageSequenceClip(image_files, fps=FPS)
+    clip.write_videofile('my_video.mp4')
+
