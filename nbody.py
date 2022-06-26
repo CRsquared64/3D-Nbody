@@ -10,9 +10,10 @@ class Nbody:
     TIMESTEP = 100 * 24
     SCALE = 75 / AU
 
-    def __init__(self, x, y, radius, mass, colour):
+    def __init__(self, x, y, radius, mass, colour, identify):
         self.x = x
         self.y = y
+        self.identify = identify
         self.radius = radius
         self.mass = mass
         self.colour = colour
