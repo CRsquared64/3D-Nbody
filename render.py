@@ -5,7 +5,8 @@ import nbody
 from multiprocessing import Process
 import os
 import os
-import moviepy.video.io.ImageSequenceClip
+import cv2
+import glob
 
 
 
@@ -14,13 +15,18 @@ FPS = 60
 
 pygame.init()
 
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+video = cv2.VideoWriter('video.mp4', fourcc, 1, (WIDTH, HEIGHT))
+
+
+
 
 def run_SOL():
     cycles = 1000
     run = True
     clock = pygame.time.Clock()
 
-    SUN = nbody.Nbody(0, 0, 15, 1.98892 * 10 ** 30, (255, 165, 0))
+    SUN = nbody.Nbody(0, 0, 12, 1.98892 * 10 ** 30, (255, 165, 0))
     SUN2 = nbody.Nbody(2 * nbody.Nbody.AU, 2, 8, 1.98892 * 10 ** 30, (255, 165, 0))
     SUN2.yv = 200.236 * 1000
     EARTH = nbody.Nbody(-1 * nbody.Nbody.AU, 2, 4, 5.9742 * 10 ** 24, (0, 0, 255))
@@ -63,14 +69,14 @@ def run_SOL():
 
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
     for i in range(len(poses[0])):
-        clock.tick(240)
+        clock.tick(60)
         WIN.fill((5, 5, 5))
         for n, body in enumerate(bodies):
             x, y = poses[n][i]
-            #pygame.draw.lines(WIN, body.colour, False, body.update, 2)
+            pygame.draw.lines(WIN, body.colour, False, body.update, 2)
             pygame.draw.circle(WIN, body.colour, (x, y), body.radius)
         pygame.image.save(WIN, f'run/nb_frame{i}.jpg')
-        pygame.display.update()
+       #pygame.display.update()
 
 
     pygame.quit()
@@ -78,9 +84,17 @@ def run_SOL():
 
 if __name__ == '__main__':
     run_SOL()
-    image_files = [os.path.join('run', img)
-                   for img in os.listdir('run')
-                   if img.endswith(".jpg")]
-    clip = moviepy.video.io.ImageSequenceClip.ImageSequenceClip(image_files, fps=FPS)
-    clip.write_videofile('my_video.mp4')
+    filenames = glob.glob("run/*.jpg")
+    filenames.sort()
+    images = [cv2.imread(img) for img in filenames]
+    img_amount = len(images)
+    with tqdm(total=img_amount) as pb:
+        for img in images:
+            video.write(img)
+            pb.update(1)
+
+cv2.destroyAllWindows()
+video.release()
+
+
 
