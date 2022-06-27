@@ -26,7 +26,7 @@ font = pygame.font.Font(pygame.font.get_default_font(), 12)
 
 
 def run_SOL():
-    cycles = 1024
+    cycles = 100
     batches = 32
     batch_size = cycles / batches
 
@@ -82,6 +82,7 @@ def run_SOL():
     print("Rendering Frames")
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
     with tqdm(total=len(poses[0])):
+        pb.update(1)
         for i in range(len(poses[0])):
             clock.tick(240)
             WIN.fill((5, 5, 5))
@@ -91,13 +92,11 @@ def run_SOL():
                 WIN.blit(text, dest=(x,y))
                 #pygame.draw.lines(WIN, body.colour, False, body.update, 2)
                 pygame.draw.circle(WIN, body.colour, (x, y), body.radius)
+
             pygame.image.save(WIN, f'run/nb_frame{i}.jpg')
-        pb.update(1)
+
        #pygame.display.update()
     print("Render Done!")
-
-
-    pygame.quit()
 
 
 if __name__ == '__main__':

@@ -7,7 +7,7 @@ WIDTH, HEIGHT = 1920, 1080
 class Nbody:
     G = 6.67428e-11
     AU = 149.6e6 * 1000
-    TIMESTEP = 100 * 24
+    TIMESTEP = 75 * 24
     SCALE = 75 / AU
 
     def __init__(self, x, y, radius, mass, colour, identify):
