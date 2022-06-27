@@ -2,8 +2,8 @@ import pygame
 from pygame.locals import *
 from tqdm import tqdm
 import nbody
-from multiprocessing import Process
-import os
+
+import pickle
 import os
 import cv2
 import glob
@@ -84,7 +84,8 @@ def run_SOL():
                     poses[n].append(body.get_draw_pos())
                     pb.update(1)
     elif load == True:
-        with open('nb_run.dat', 'rb') as handle
+        with open('nb_run.dat', 'rb') as handle:
+            poses = pickle.load(handle)
 
     print("Rendering Frames")
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
