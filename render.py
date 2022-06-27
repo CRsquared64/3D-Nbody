@@ -84,12 +84,13 @@ def run_SOL():
                     poses[n].append(body.get_draw_pos())
                     pb.update(1)
     elif load == True:
+        print("Loading Data")
         with open('nb_run.dat', 'rb') as handle:
             poses = pickle.load(handle)
 
     print("Rendering Frames")
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
-    with tqdm(total=len(poses[0])):
+    with tqdm(total=len(poses[0])) as pb:
         pb.update(1)
         for i in range(len(poses[0])):
             clock.tick(240)
@@ -109,6 +110,7 @@ def run_SOL():
 
 if __name__ == '__main__':
     run_SOL()
+    print("Reading Frames")
     filenames = sorted(glob.glob("run/*.jpg"), key=os.path.getmtime)
 
     images = [cv2.imread(img) for img in filenames]
