@@ -30,6 +30,8 @@ def run_SOL():
     batches = 32
     batch_size = cycles / batches
 
+    load = True
+
     print(f"Config \n"
           f"Cycles: {cycles} \n"
           f"batches: {batches} \n"
@@ -71,14 +73,19 @@ def run_SOL():
     poses = [[] for i in range(len(bodies))]
     amount = len(bodies) * cycles
 
-    print("Calculating Positions")
 
-    with tqdm(total=amount) as pb:
-        for i in range(cycles):
-            for n, body in enumerate(bodies):
-                body.position(bodies)
-                poses[n].append(body.get_draw_pos())
-                pb.update(1)
+
+    if load != True:
+        print("Calculating Positions")
+        with tqdm(total=amount) as pb:
+            for i in range(cycles):
+                for n, body in enumerate(bodies):
+                    body.position(bodies)
+                    poses[n].append(body.get_draw_pos())
+                    pb.update(1)
+    elif load == True:
+        with open('nb_run.dat', 'rb') as handle
+
     print("Rendering Frames")
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
     with tqdm(total=len(poses[0])):
