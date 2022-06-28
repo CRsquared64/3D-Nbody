@@ -18,19 +18,17 @@ FPS = 60
 
 pygame.font.init()
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-video = cv2.VideoWriter('video.mp4', fourcc, 60, (WIDTH, HEIGHT))
+video = cv2.VideoWriter('video.mp4', fourcc, FPS, (WIDTH, HEIGHT))
 
 font = pygame.font.Font(pygame.font.get_default_font(), 12)
 
 
-
-
 def run_SOL():
-    cycles = 100
+    cycles = 2000
     batches = 32
     batch_size = cycles / batches
 
-    load = True
+    load = False
 
     print(f"Config \n"
           f"Cycles: {cycles} \n"
@@ -73,9 +71,7 @@ def run_SOL():
     poses = [[] for i in range(len(bodies))]
     amount = len(bodies) * cycles
 
-
-
-    if load != True:
+    if not load:
         print("Calculating Positions")
         with tqdm(total=amount) as pb:
             for i in range(cycles):
@@ -83,7 +79,11 @@ def run_SOL():
                     body.position(bodies)
                     poses[n].append(body.get_draw_pos())
                     pb.update(1)
-    elif load == True:
+                if i % batch_size == 0:
+                    print(f"Batch ID: {i // batch_size}")
+
+
+    if load:
         print("Loading Data")
         with open('nb_run.dat', 'rb') as handle:
             poses = pickle.load(handle)
@@ -91,20 +91,22 @@ def run_SOL():
     print("Rendering Frames")
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
     with tqdm(total=len(poses[0])) as pb:
-        pb.update(1)
+
         for i in range(len(poses[0])):
+            pb.update(1)
             clock.tick(240)
             WIN.fill((5, 5, 5))
             for n, body in enumerate(bodies):
                 x, y = poses[n][i]
+
                 text = font.render(body.identify, True, body.colour)
-                WIN.blit(text, dest=(x,y))
-                #pygame.draw.lines(WIN, body.colour, False, body.update, 2)
+                WIN.blit(text, dest=(x, y))
+                # pygame.draw.lines(WIN, body.colour, False, body.update, 2)
                 pygame.draw.circle(WIN, body.colour, (x, y), body.radius)
 
             pygame.image.save(WIN, f'run/nb_frame{i}.jpg')
 
-       #pygame.display.update()
+    # pygame.display.update()
     print("Render Done!")
 
 
@@ -123,6 +125,3 @@ if __name__ == '__main__':
 
 cv2.destroyAllWindows()
 video.release()
-
-
-
