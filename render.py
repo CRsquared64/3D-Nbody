@@ -11,7 +11,8 @@ import glob
 try:
     os.mkdir('run')
 except:
-    pass
+    print('Directory "run" already exists')
+
 
 WIDTH, HEIGHT = 1920, 1080
 FPS = 60
@@ -28,7 +29,7 @@ def run_SOL():
     batches = 32
     batch_size = cycles / batches
 
-    load = True
+    load = False
 
     print(f"Config \n"
           f"Cycles: {cycles} \n"
