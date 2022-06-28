@@ -28,13 +28,13 @@ def run_SOL():
     batches = 32
     batch_size = cycles / batches
 
-    load = False
+    load = True
 
     print(f"Config \n"
           f"Cycles: {cycles} \n"
           f"batches: {batches} \n"
           f"batch size: {batch_size}")
-    run = True
+    run = False
     clock = pygame.time.Clock()
 
     SUN = nbody.Nbody(0, 0, 10, 1.98892 * 10 ** 30, (255, 165, 0), "sun")
@@ -72,15 +72,19 @@ def run_SOL():
     amount = len(bodies) * cycles
 
     if not load:
+        n = 0
         print("Calculating Positions")
         with tqdm(total=amount) as pb:
             for i in range(cycles):
+                n = n + 1
                 for n, body in enumerate(bodies):
                     body.position(bodies)
                     poses[n].append(body.get_draw_pos())
                     pb.update(1)
-                if i % batch_size == 0:
-                    print(f"Batch ID: {i // batch_size}")
+                    with open('nb_run.dat', 'wb') as handle:
+                        pickle.dump(poses, handle)
+                if n % batch_size == 0:
+                    print(f"BATCH ID: {n // batch_size}")
 
 
     if load:
