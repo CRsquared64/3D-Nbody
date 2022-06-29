@@ -65,9 +65,9 @@ def run_SOL():
     data = json.dumps(data)
 
 
-    """if save_config:
-        with open('config/config.json', 'wb') as json_file:
-            json.dump(data, json_file, ensure_ascii=False)"""
+    if save_config:
+        with open('config/config.json', 'w',) as json_file:
+            json.dump(data, json_file)
 
 
 
