@@ -82,7 +82,7 @@ def run_SOL():
                     body.position(bodies)
                     poses[n].append(body.get_draw_pos())
                     pb.update(1)
-                    with open('nb_run.dat', 'wb') as handle:
+                    with open('config/nb_run.dat', 'wb') as handle:
                         pickle.dump(poses, handle)
                 if n % batch_size == 0:
                     print(f"BATCH ID: {n // batch_size}")
@@ -90,7 +90,7 @@ def run_SOL():
 
     if load:
         print("Loading Data")
-        with open('nb_run.dat', 'rb') as handle:
+        with open('config/nb_run.dat', 'rb') as handle:
             poses = pickle.load(handle)
 
     print("Rendering Frames")
