@@ -15,6 +15,10 @@ try:
 except:
     print('Directory "run" already exists')
 
+try:
+    config_f = open('config/config.json')
+except:
+    print("Config File could not be found.")
 
 WIDTH, HEIGHT = 1920, 1080
 FPS = 60
@@ -27,9 +31,12 @@ font = pygame.font.Font(pygame.font.get_default_font(), 12)
 
 
 def run_SOL():
+    data = json.loads(config_f.read())
     cycles = 10000
     batches = 32
     batch_size = cycles / batches
+
+
 
     load = False
     save_bodies = True
