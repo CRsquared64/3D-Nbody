@@ -27,18 +27,19 @@ video = cv2.VideoWriter('video.mp4', fourcc, FPS, (WIDTH, HEIGHT))
 
 font = pygame.font.Font(pygame.font.get_default_font(), 12)
 
-"""
+
 def read_config():
     with open('config/config.json') as json_file:
         data = json.load(json_file)
         for i in data:
-            cycles = 
-            batches = 
-            load = 
-            save_bodies = 
+            cycles = (['cycles'])
+            batches = (['batches'])
+            load =  (['load'])
+            save_bodies = (['save_bodies'])
+        print(cycles, batches, load, save_bodies)
 
 
-"""
+
 
 def run_SOL():
 
