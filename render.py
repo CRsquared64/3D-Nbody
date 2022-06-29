@@ -49,17 +49,28 @@ def run_SOL():
     load = False
     save_bodies = True
 
-    data = [cycles, batches, batch_size, load, save_bodies]
-    if save_config:
-        with open('config/config.json', 'wb') as json_file:
-            json.dump(data, json_file, ensure_ascii=False)
-
-
     print(f"Config \n"
           f"Cycles: {cycles} \n"
           f"batches: {batches} \n"
           f"batch size: {batch_size}")
     run = False
+
+    #Convert to json
+
+    data = {"cycles: ": cycles,
+            "batches: ": batches,
+            "batch_size: ": batch_size,
+            "load: ": load,
+            "save_bodies: ": save_bodies}
+    data = json.dumps(data)
+
+
+    """if save_config:
+        with open('config/config.json', 'wb') as json_file:
+            json.dump(data, json_file, ensure_ascii=False)"""
+
+
+
     clock = pygame.time.Clock()
 
     SUN = nbody.Nbody(0, 0, 10, 1.98892 * 10 ** 30, (255, 165, 0), "sun")
