@@ -20,6 +20,7 @@ except:
 
 
 WIDTH, HEIGHT = 1920, 1080
+display = (WIDTH,HEIGHT)
 FPS = 60
 
 pygame.font.init()
@@ -30,6 +31,16 @@ pygame.init()
 
 font = pygame.font.Font(pygame.font.get_default_font(), 12)
 
+glEnable(GL_DEPTH_TEST)
+
+sphere = gluNewQuadric()
+glMatrixMode(GL_PROJECTION)
+gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
+
+glMatrixMode(GL_MODELVIEW)
+gluLookAt(0, -8, 0, 0, 0, 0, 0, 0, 1)
+viewMatrix = glGetFloatv(GL_MODELVIEW_MATRIX)
+glLoadIdentity()
 
 def run_SOL():
     cycles = 1000
@@ -106,7 +117,7 @@ def run_SOL():
             poses = pickle.load(handle)
 
     print("Rendering Frames")
-    WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
+    WIN = pygame.display.set_mode((WIDTH, HEIGHT), DOUBLEBUF | OPENGL)
     with tqdm(total=len(poses[0])) as pb:
 
         for i in range(len(poses[0])):
