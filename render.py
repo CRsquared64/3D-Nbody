@@ -25,7 +25,7 @@ font = pygame.font.Font(pygame.font.get_default_font(), 12)
 
 
 def run_SOL():
-    cycles = 2000
+    cycles = 10000
     batches = 32
     batch_size = cycles / batches
 
@@ -39,8 +39,8 @@ def run_SOL():
     clock = pygame.time.Clock()
 
     SUN = nbody.Nbody(0, 0, 10, 1.98892 * 10 ** 30, (255, 165, 0), "sun")
-    SUN2 = nbody.Nbody(2 * nbody.Nbody.AU, 2, 8, 1.98892 * 10 ** 30, (255, 165, 0), "sun2")
-    SUN2.yv = 200.236 * 1000
+    SUN2 = nbody.Nbody(2 * nbody.Nbody.AU, 2, 8, 1.98892 * 10 ** 29, (255, 165, 0), "sun2")
+    SUN2.yv = 200.236 * 1
     EARTH = nbody.Nbody(-1 * nbody.Nbody.AU, 2, 5, 5.9742 * 10 ** 24, (0, 0, 255), "earth")
     EARTH.yv = 29.783 * 1000
     MARS = nbody.Nbody(-1.524 * nbody.Nbody.AU, 0, 3, 6.39 * 10 ** 23, (255, 25, 0), "mars")
@@ -67,7 +67,7 @@ def run_SOL():
     STARMAN.yv = -27.67 * 1000
     STARMAN.xv = 6.82 * 1000
 
-    bodies = [SUN, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN, STARMAN]
+    bodies = [SUN, SUN2, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN, STARMAN]
 
     poses = [[] for i in range(len(bodies))]
     amount = len(bodies) * cycles
@@ -109,10 +109,11 @@ def run_SOL():
                 # pygame.draw.lines(WIN, body.colour, False, body.update, 2)
                 pygame.draw.circle(WIN, body.colour, (x, y), body.radius)
 
-            pygame.image.save(WIN, f'run/nb_frame{i}.jpg')
+            pygame.image.save(WIN, f'run/nb_frame0{i}.jpg')
 
     # pygame.display.update()
     print("Render Done!")
+    pygame.quit()
 
 
 if __name__ == '__main__':
