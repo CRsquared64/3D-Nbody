@@ -30,6 +30,7 @@ def run_SOL():
     batch_size = cycles / batches
 
     load = False
+    save_bodies = True
 
     print(f"Config \n"
           f"Cycles: {cycles} \n"
@@ -68,6 +69,10 @@ def run_SOL():
     STARMAN.xv = 6.82 * 1000
 
     bodies = [SUN, SUN2, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN, STARMAN]
+
+    if save_bodies:
+        with open('config/bodies.json', 'wb') as handle:
+            pickle.dump(bodies, handle)
 
     poses = [[] for i in range(len(bodies))]
     amount = len(bodies) * cycles
