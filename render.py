@@ -36,7 +36,7 @@ def read_config():
             batches = (['batches'])
             load =  (['load'])
             save_bodies = (['save_bodies'])
-        print(cycles, batches, load, save_bodies)
+        return cycles, batches, load, save_bodies
 
 
 
@@ -157,7 +157,7 @@ def run_SOL():
 
 
 if __name__ == '__main__':
-    run_SOL()
+    read_config()
     print("Reading Frames")
     filenames = sorted(glob.glob("run/*.jpg"), key=os.path.getmtime)
 
