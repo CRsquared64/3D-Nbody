@@ -8,10 +8,14 @@ import os
 import cv2
 import glob
 
+import json
+
 try:
     os.mkdir('run')
 except:
     print('Directory "run" already exists')
+
+save_config = True
 
 
 WIDTH, HEIGHT = 1920, 1080
@@ -24,18 +28,50 @@ video = cv2.VideoWriter('video.mp4', fourcc, FPS, (WIDTH, HEIGHT))
 font = pygame.font.Font(pygame.font.get_default_font(), 12)
 
 
+def read_config():
+    with open('config/config.json') as json_file:
+        data = json.load(json_file)
+        for i in data:
+            cycles = (['cycles'])
+            batches = (['batches'])
+            load =  (['load'])
+            save_bodies = (['save_bodies'])
+        return cycles, batches, load, save_bodies
+
+
+
+
 def run_SOL():
+
     cycles = 10000
     batches = 32
     batch_size = cycles / batches
 
     load = False
+    save_bodies = True
 
     print(f"Config \n"
           f"Cycles: {cycles} \n"
           f"batches: {batches} \n"
           f"batch size: {batch_size}")
     run = False
+
+    #Convert to json
+
+    data = {"cycles: ": cycles,
+            "batches: ": batches,
+            "batch_size: ": batch_size,
+            "load: ": load,
+            "save_bodies: ": save_bodies}
+    data = json.dumps(data)
+
+
+    if save_config:
+        with open('config/config.json', 'w',) as json_file:
+            json.dump(data, json_file)
+
+
+
     clock = pygame.time.Clock()
 
     SUN = nbody.Nbody(0, 0, 10, 1.98892 * 10 ** 30, (255, 165, 0), "sun")
@@ -69,6 +105,10 @@ def run_SOL():
 
     bodies = [SUN, SUN2, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN, STARMAN]
 
+    if save_bodies:
+        with open('config/bodies.json', 'wb') as handle:
+            pickle.dump(bodies, handle)
+
     poses = [[] for i in range(len(bodies))]
     amount = len(bodies) * cycles
 
@@ -82,7 +122,7 @@ def run_SOL():
                     body.position(bodies)
                     poses[n].append(body.get_draw_pos())
                     pb.update(1)
-                    with open('nb_run.dat', 'wb') as handle:
+                    with open('config/nb_run.dat', 'wb') as handle:
                         pickle.dump(poses, handle)
                 if n % batch_size == 0:
                     print(f"BATCH ID: {n // batch_size}")
@@ -90,7 +130,7 @@ def run_SOL():
 
     if load:
         print("Loading Data")
-        with open('nb_run.dat', 'rb') as handle:
+        with open('config/nb_run.dat', 'rb') as handle:
             poses = pickle.load(handle)
 
     print("Rendering Frames")
@@ -117,7 +157,7 @@ def run_SOL():
 
 
 if __name__ == '__main__':
-    run_SOL()
+    read_config()
     print("Reading Frames")
     filenames = sorted(glob.glob("run/*.jpg"), key=os.path.getmtime)
 
