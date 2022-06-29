@@ -3,6 +3,11 @@ from pygame.locals import *
 from tqdm import tqdm
 import nbody
 
+from pygame.locals import *
+
+from OpenGL.GL import *
+from OpenGL.GLU import *
+
 import pickle
 import os
 import cv2
@@ -21,11 +26,13 @@ pygame.font.init()
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 video = cv2.VideoWriter('video.mp4', fourcc, FPS, (WIDTH, HEIGHT))
 
+pygame.init()
+
 font = pygame.font.Font(pygame.font.get_default_font(), 12)
 
 
 def run_SOL():
-    cycles = 10000
+    cycles = 1000
     batches = 32
     batch_size = cycles / batches
 
@@ -68,7 +75,7 @@ def run_SOL():
     STARMAN.yv = -27.67 * 1000
     STARMAN.xv = 6.82 * 1000
 
-    bodies = [SUN, SUN2, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN, STARMAN]
+    bodies = [SUN, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN, STARMAN]
 
     if save_bodies:
         with open('config/bodies.json', 'wb') as handle:
