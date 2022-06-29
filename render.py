@@ -15,10 +15,8 @@ try:
 except:
     print('Directory "run" already exists')
 
-try:
-    config_f = open('config/config.json')
-except:
-    print("Config File could not be found.")
+save_config = True
+
 
 WIDTH, HEIGHT = 1920, 1080
 FPS = 60
@@ -29,17 +27,33 @@ video = cv2.VideoWriter('video.mp4', fourcc, FPS, (WIDTH, HEIGHT))
 
 font = pygame.font.Font(pygame.font.get_default_font(), 12)
 
+"""
+def read_config():
+    with open('config/config.json') as json_file:
+        data = json.load(json_file)
+        for i in data:
+            cycles = 
+            batches = 
+            load = 
+            save_bodies = 
+
+
+"""
 
 def run_SOL():
-    data = json.loads(config_f.read())
+
     cycles = 10000
     batches = 32
     batch_size = cycles / batches
 
-
-
     load = False
     save_bodies = True
+
+    data = [cycles, batches, batch_size, load, save_bodies]
+    if save_config:
+        with open('config/config.json', 'wb') as json_file:
+            json.dump(data, json_file, ensure_ascii=False)
+
 
     print(f"Config \n"
           f"Cycles: {cycles} \n"
