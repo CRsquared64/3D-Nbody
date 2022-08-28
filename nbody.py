@@ -1,5 +1,5 @@
 import math
-import numba
+
 
 WIDTH, HEIGHT = 1920, 1080
 
