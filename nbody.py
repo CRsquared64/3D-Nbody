@@ -1,8 +1,8 @@
 import math
 import numba
 
-
 WIDTH, HEIGHT = 1920, 1080
+
 
 class Nbody:
     G = 6.67428e-11
@@ -38,10 +38,12 @@ class Nbody:
         force_x = math.cos(angle) * force
         force_y = math.sin(angle) * force
 
+
         return force_x, force_y
 
     def position(self, bodies):
-        total_force_x = total_force_y = 0
+        total_force_x = 0
+        total_force_y = 0
 
 
 
@@ -83,10 +85,10 @@ class Nbody:
         y = self.y * self.SCALE + HEIGHT / 2
 
         if len(self.trail) > 2:
-            #self.update = []
+            # self.update = []
             for point in self.trail:
                 x, y = point
                 x = x * self.SCALE + WIDTH / 2
                 y = y * self.SCALE + HEIGHT / 2
-                #self.update.append((x,y))
-        return x,y
+                # self.update.append((x,y))
+        return x, y
