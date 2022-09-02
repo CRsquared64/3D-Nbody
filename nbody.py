@@ -7,8 +7,10 @@ WIDTH, HEIGHT = 1920, 1080
 class Nbody:
     G = 6.67428e-11
     AU = 149.6e6 * 1000
+    distance_to_moon = 3.84399 * 10 ** 8
     TIMESTEP = 75 * 24
-    SCALE = 75 / AU
+    SCALE = 100 / distance_to_moon # 75 / AU
+
 
     def __init__(self, x, y, radius, mass, colour, identify):
         self.x = x
