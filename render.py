@@ -11,6 +11,7 @@ import glob
 import json
 
 import sim.solarSystem
+import sim.earthMoonSystem
 
 try:
     os.mkdir('run')
@@ -76,7 +77,7 @@ def render():
 
     clock = pygame.time.Clock()
 
-    bodies = sim.solarSystem.bodies
+    bodies = sim.earthMoonSystem.bodies
 
     if save_bodies:
         with open('config/bodies.json', 'wb') as handle:
@@ -97,8 +98,7 @@ def render():
                     pb.update(1)
                     with open('config/nb_run.dat', 'wb') as handle:
                         pickle.dump(poses, handle)
-                if n % batch_size == 0:
-                    print(f"BATCH ID: {n // batch_size}")
+
 
 
     if load:
