@@ -8,7 +8,7 @@ class Nbody:
     G = 6.67428e-11
     AU = 149.6e6 * 1000
     distance_to_moon = 3.84399 * 10 ** 8
-    TIMESTEP = 75 * 24
+    TIMESTEP = 100
     SCALE = 100 / distance_to_moon # 75 / AU
 
 

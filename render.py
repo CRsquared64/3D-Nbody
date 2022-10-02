@@ -46,7 +46,7 @@ def read_config():
 
 def render():
 
-    cycles = 1000
+    cycles = 10000
     batches = 32
     batch_size = cycles / batches
 
