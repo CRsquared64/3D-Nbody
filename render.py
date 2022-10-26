@@ -34,6 +34,7 @@ font = pygame.font.Font(pygame.font.get_default_font(), 12)
 i_font = pygame.font.Font(pygame.font.get_default_font(), 24)
 
 
+
 def read_config():
     with open('config/config.json') as json_file:
         data = json.load(json_file)
@@ -45,8 +46,13 @@ def read_config():
         return cycles, batches, load, save_bodies
 
 
+vid_id = ""
+cycles = ""
+
 def render():
-    cycles = 30000
+    global vid_id, cycles
+
+    cycles = 35000
     batches = 32
     batch_size = cycles / batches
 
@@ -57,6 +63,7 @@ def render():
 
     print(f"Config \n"
           f"Cycles: {cycles} \n"
+          f"Timestep: {nbody.Nbody.TIMESTEP} \n"
           f"batches: {batches} \n"
           f"batch size: {batch_size} \n"
           f"frame_interval: {frame_interval}")
@@ -78,7 +85,7 @@ def render():
     clock = pygame.time.Clock()
 
     bodies = sim.earthMoonSystem.bodies
-    bodies_f_id = sim.earthMoonSystem
+    vid_id = sim.earthMoonSystem.video_name
 
     if save_bodies:
         with open('config/bodies.json', 'wb') as handle:
@@ -111,7 +118,7 @@ def render():
 
         for i in range(len(poses[0])):
             pb.update(1)
-            clock.tick(240)
+            clock.tick(60)
             WIN.fill((5, 5, 5))
             d_count = i_font.render(f"Days: {(i * body.TIMESTEP) // 86400}", True, (
             255, 255, 255))  # amount of iterations, * timestep = seconds. seconds // 86400 == days
@@ -121,29 +128,29 @@ def render():
             WIN.blit(h_count, (0, 25))
             WIN.blit(iterations, (0, 50))
 
-            for n, body in enumerate(bodies):
-                x, y = poses[n][i]
-                x = int(x)
-                y = int(y)
-
-                text = font.render(body.identify, True, body.colour)
-                WIN.blit(text, dest=(x, y))
-
-                # pygame.draw.circle(WIN, body.colour, (x, y), body.radius)  old method
-                gfxdraw.aacircle(WIN, x, y, body.radius, body.colour)
-                gfxdraw.filled_circle(WIN, x, y, body.radius, body.colour)
-
             if i % frame_interval == 0:
-                pygame.image.save(WIN, f'run/nb_frame0{i}.jpg')
+                for n, body in enumerate(bodies):
+                    x, y = poses[n][i]
+                    x = int(x)
+                    y = int(y)
+
+                    text = font.render(body.identify, True, body.colour)
+                    WIN.blit(text, dest=(x, y))
+
+                    # pygame.draw.circle(WIN, body.colour, (x, y), body.radius)  old method
+                    gfxdraw.aacircle(WIN, x, y, body.radius, body.colour)
+                    gfxdraw.filled_circle(WIN, x, y, body.radius, body.colour)
+
+
+                    pygame.image.save(WIN, f'run/nb_frame0{i}.jpg')
+
+
 
     # pygame.display.update()
     print("Render Done!")
     pygame.quit()
 
-video_name = (f"{}")
 
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-video = cv2.VideoWriter('video.mp4', fourcc, FPS, (WIDTH, HEIGHT))
 
 if __name__ == '__main__':
     render()
@@ -152,6 +159,11 @@ if __name__ == '__main__':
 
     images = [cv2.imread(img) for img in filenames]
     img_amount = len(images)
+
+    video_name = f"{vid_id}_{cycles}_{nbody.Nbody.TIMESTEP}.mp4"
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video = cv2.VideoWriter(video_name, fourcc, FPS, (WIDTH, HEIGHT))
+
     print("Creating Video From Frames")
     with tqdm(total=img_amount) as pb:
         for img in images:
