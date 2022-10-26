@@ -1,5 +1,7 @@
 import pygame
 from pygame.locals import *
+from pygame import gfxdraw
+
 from tqdm import tqdm
 import nbody
 
@@ -7,6 +9,7 @@ import pickle
 import os
 import cv2
 import glob
+import shutil
 
 import json
 
@@ -17,18 +20,18 @@ try:
     os.mkdir('run')
 except:
     print('Directory "run" already exists')
+    shutil.rmtree('run')
+    os.mkdir('run')
 
 save_config = True
-
 
 WIDTH, HEIGHT = 1920, 1080
 FPS = 60
 
 pygame.font.init()
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-video = cv2.VideoWriter('video.mp4', fourcc, FPS, (WIDTH, HEIGHT))
 
 font = pygame.font.Font(pygame.font.get_default_font(), 12)
+i_font = pygame.font.Font(pygame.font.get_default_font(), 24)
 
 
 def read_config():
@@ -37,23 +40,20 @@ def read_config():
         for i in data:
             cycles = (['cycles'])
             batches = (['batches'])
-            load =  (['load'])
+            load = (['load'])
             save_bodies = (['save_bodies'])
         return cycles, batches, load, save_bodies
 
 
-
-
 def render():
-
-    cycles = 100000
+    cycles = 30000
     batches = 32
     batch_size = cycles / batches
 
     load = False
     save_bodies = True
 
-    frame_interval =  60
+    frame_interval = 60
 
     print(f"Config \n"
           f"Cycles: {cycles} \n"
@@ -62,7 +62,7 @@ def render():
           f"frame_interval: {frame_interval}")
     run = False
 
-    #Convert to json
+    # Convert to json
 
     data = {"cycles: ": cycles,
             "batches: ": batches,
@@ -71,16 +71,14 @@ def render():
             "save_bodies: ": save_bodies}
     data = json.dumps(data)
 
-
     if save_config:
-        with open('config/config.json', 'w',) as json_file:
+        with open('config/config.json', 'w', ) as json_file:
             json.dump(data, json_file)
-
-
 
     clock = pygame.time.Clock()
 
     bodies = sim.earthMoonSystem.bodies
+    bodies_f_id = sim.earthMoonSystem
 
     if save_bodies:
         with open('config/bodies.json', 'wb') as handle:
@@ -102,8 +100,6 @@ def render():
                     with open('config/nb_run.dat', 'wb') as handle:
                         pickle.dump(poses, handle)
 
-
-
     if load:
         print("Loading Data")
         with open('config/nb_run.dat', 'rb') as handle:
@@ -117,13 +113,25 @@ def render():
             pb.update(1)
             clock.tick(240)
             WIN.fill((5, 5, 5))
+            d_count = i_font.render(f"Days: {(i * body.TIMESTEP) // 86400}", True, (
+            255, 255, 255))  # amount of iterations, * timestep = seconds. seconds // 86400 == days
+            h_count = i_font.render(f"Hours: {(i * body.TIMESTEP) // 3600}", True, (255, 255, 255))
+            iterations = i_font.render(f"Iterations: {i}", True, (255, 255, 255))
+            WIN.blit(d_count, (0, 0))
+            WIN.blit(h_count, (0, 25))
+            WIN.blit(iterations, (0, 50))
+
             for n, body in enumerate(bodies):
                 x, y = poses[n][i]
+                x = int(x)
+                y = int(y)
 
                 text = font.render(body.identify, True, body.colour)
                 WIN.blit(text, dest=(x, y))
-                # pygame.draw.lines(WIN, body.colour, False, body.update, 2)
-                pygame.draw.circle(WIN, body.colour, (x, y), body.radius)
+
+                # pygame.draw.circle(WIN, body.colour, (x, y), body.radius)  old method
+                gfxdraw.aacircle(WIN, x, y, body.radius, body.colour)
+                gfxdraw.filled_circle(WIN, x, y, body.radius, body.colour)
 
             if i % frame_interval == 0:
                 pygame.image.save(WIN, f'run/nb_frame0{i}.jpg')
@@ -132,6 +140,10 @@ def render():
     print("Render Done!")
     pygame.quit()
 
+video_name = (f"{}")
+
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+video = cv2.VideoWriter('video.mp4', fourcc, FPS, (WIDTH, HEIGHT))
 
 if __name__ == '__main__':
     render()
@@ -148,4 +160,3 @@ if __name__ == '__main__':
 
 cv2.destroyAllWindows()
 video.release()
- 
