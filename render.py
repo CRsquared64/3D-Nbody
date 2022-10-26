@@ -53,10 +53,13 @@ def render():
     load = False
     save_bodies = True
 
+    frame_interval =  60
+
     print(f"Config \n"
           f"Cycles: {cycles} \n"
           f"batches: {batches} \n"
-          f"batch size: {batch_size}")
+          f"batch size: {batch_size} \n"
+          f"frame_interval: {frame_interval}")
     run = False
 
     #Convert to json
@@ -122,7 +125,8 @@ def render():
                 # pygame.draw.lines(WIN, body.colour, False, body.update, 2)
                 pygame.draw.circle(WIN, body.colour, (x, y), body.radius)
 
-            pygame.image.save(WIN, f'run/nb_frame0{i}.jpg')
+            if i % frame_interval == 0:
+                pygame.image.save(WIN, f'run/nb_frame0{i}.jpg')
 
     # pygame.display.update()
     print("Render Done!")
@@ -144,3 +148,4 @@ if __name__ == '__main__':
 
 cv2.destroyAllWindows()
 video.release()
+ 
