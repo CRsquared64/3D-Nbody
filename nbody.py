@@ -8,7 +8,7 @@ class Nbody:
     G = 6.67428e-11
     AU = 149.6e6 * 1000
     distance_to_moon = 3.84399 * 10 ** 8
-    TIMESTEP = 50
+    TIMESTEP = 75
     SCALE = 500 / distance_to_moon # 75 / AU
 
 
@@ -85,12 +85,11 @@ class Nbody:
     def get_draw_pos(self):
         x = self.x * self.SCALE + WIDTH / 2
         y = self.y * self.SCALE + HEIGHT / 2
-
+        self.update = []
         if len(self.trail) > 2:
-            # self.update = []
             for point in self.trail:
                 x, y = point
                 x = x * self.SCALE + WIDTH / 2
                 y = y * self.SCALE + HEIGHT / 2
-                # self.update.append((x,y))
+                self.update.append((x,y))
         return x, y
