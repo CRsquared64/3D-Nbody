@@ -11,3 +11,4 @@ MOON = nbody.Nbody(-1 * distance_to_moon, 0, 12,  7.34767309 * 10 ** 22, (150, 1
 MOON.yv = 1.022 * 1000 #kms * 1000... why? old me please leave hints as to why it needs to be 1000
 
 bodies = [EARTH, MOON]
+video_name = "MoonSystem"
