@@ -8,6 +8,7 @@ class Nbody:
     G = 6.67428e-11
     AU = 149.6e6 * 1000
     distance_to_moon = 3.84399 * 10 ** 8
+    PLUTO_TO_CHARON = 19640
     TIMESTEP = 60 #seconds
     SCALE = 500 / AU # 75 / AU or 500 / distance-tomoon
 
