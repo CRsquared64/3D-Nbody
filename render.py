@@ -15,6 +15,7 @@ import json
 
 import sim.solarSystem
 import sim.earthMoonSystem
+import sim.plutoCharonSystem
 
 try:
     os.mkdir('run')
@@ -52,7 +53,7 @@ cycles = ""
 def render():
     global vid_id, cycles
 
-    cycles = 5000
+    cycles = 10000
     batches = 32
     batch_size = cycles / batches
 
@@ -84,8 +85,8 @@ def render():
 
     clock = pygame.time.Clock()
 
-    bodies = sim.solarSystem.bodies
-    vid_id = sim.solarSystem.video_name
+    bodies = sim.plutoCharonSystem.bodies
+    vid_id = sim.plutoCharonSystem.video_name
 
     if save_bodies:
         with open('config/bodies.json', 'wb') as handle:
