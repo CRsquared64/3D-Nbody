@@ -34,3 +34,4 @@ STARMAN.yv = -27.67 * 1000
 STARMAN.xv = 6.82 * 1000
 
 bodies = [SUN, MARS, VENUS, MERCURY, EARTH, asteroid, JUPITER, SATURN, STARMAN]
+video_name = "SolarSystem"
