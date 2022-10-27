@@ -19,7 +19,7 @@ import sim.earthMoonSystem
 try:
     os.mkdir('run')
 except:
-    print('Directory "run" already exists')
+    print('Emptying old cache...')
     shutil.rmtree('run')
     os.mkdir('run')
 
@@ -52,14 +52,14 @@ cycles = ""
 def render():
     global vid_id, cycles
 
-    cycles = 35000
+    cycles = 5000
     batches = 32
     batch_size = cycles / batches
 
     load = False
     save_bodies = True
 
-    frame_interval = 60
+    frame_interval = 24
 
     print(f"Config \n"
           f"Cycles: {cycles} \n"
@@ -84,8 +84,8 @@ def render():
 
     clock = pygame.time.Clock()
 
-    bodies = sim.earthMoonSystem.bodies
-    vid_id = sim.earthMoonSystem.video_name
+    bodies = sim.solarSystem.bodies
+    vid_id = sim.solarSystem.video_name
 
     if save_bodies:
         with open('config/bodies.json', 'wb') as handle:
@@ -121,7 +121,7 @@ def render():
             clock.tick(60)
             WIN.fill((5, 5, 5))
             d_count = i_font.render(f"Days: {(i * body.TIMESTEP) // 86400}", True, (
-            255, 255, 255))  # amount of iterations, * timestep = seconds. seconds // 86400 == days
+            255, 255, 255))  # amount of iterations, * timestep = seconds. seconds // 86400 == days OR amount of iterations * timestep = timescale per iteration
             h_count = i_font.render(f"Hours: {(i * body.TIMESTEP) // 3600}", True, (255, 255, 255))
             iterations = i_font.render(f"Iterations: {i}", True, (255, 255, 255))
             WIN.blit(d_count, (0, 0))

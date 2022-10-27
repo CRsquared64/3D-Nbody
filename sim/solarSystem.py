@@ -11,7 +11,7 @@ EARTH = nbody.Nbody(-1 * nbody.Nbody.AU, 2, 4, 5.9742 * 10 ** 24, (0, 0, 255), "
 EARTH.yv = 29.783 * 1000
 MARS = nbody.Nbody(-1.524 * nbody.Nbody.AU, 0, 3, 6.39 * 10 ** 23, (255, 25, 0), "mars")
 MARS.yv = 24.077 * 1000
-VENUS = nbody.Nbody(0.723 * nbody.Nbody.AU, 0, 3.5, 4.865 * 10 ** 24, (255, 255, 255), "venus")
+VENUS = nbody.Nbody(0.723 * nbody.Nbody.AU, 0, 3, 4.865 * 10 ** 24, (255, 255, 255), "venus")
 VENUS.yv = -35.02 * 1000
 
 MOON = nbody.Nbody(-1.02 * nbody.Nbody.AU, 2, 2, 1.73477e22, (150, 150, 150), "moon")
