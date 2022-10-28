@@ -53,7 +53,7 @@ cycles = ""
 def render():
     global vid_id, cycles
 
-    cycles = 5000
+    cycles = 50000
     batches = 32
     batch_size = cycles / batches
 
@@ -85,8 +85,8 @@ def render():
 
     clock = pygame.time.Clock()
 
-    bodies = sim.plutoCharonSystem.bodies
-    vid_id = sim.plutoCharonSystem.video_name
+    bodies = sim.earthMoonSystem.bodies
+    vid_id = sim.earthMoonSystem.video_name
 
     if save_bodies:
         with open('config/bodies.json', 'wb') as handle:
