@@ -53,7 +53,7 @@ cycles = ""
 def render():
     global vid_id, cycles
 
-    cycles = 50000
+    cycles = 100000
     batches = 32
     batch_size = cycles / batches
 
@@ -130,10 +130,12 @@ def render():
             # * timestep = timescale per iteration
             h_count = i_font.render(f"Hours: {(i * body.TIMESTEP) // 3600}", True, (255, 255, 255))
             iterations = i_font.render(f"Iterations: {i}", True, (255, 255, 255))
+            count_bodies = i_font.render(f"Amount of Bodies: {len(bodies)}", True, (255,255,255))
 
             WIN.blit(d_count, (0, 0))
             WIN.blit(h_count, (0, 25))
             WIN.blit(iterations, (0, 50))
+            WIN.blit(count_bodies, (0, 100))
 
             if i % frame_interval == 0:
                 for n, body in enumerate(bodies):
