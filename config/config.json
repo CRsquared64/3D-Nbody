@@ -1,1 +1,1 @@
-"{\"cycles: \": 10000, \"batches: \": 32, \"batch_size: \": 312.5, \"load: \": false, \"save_bodies: \": true}"
+"{\"cycles: \": 5000, \"batches: \": 32, \"batch_size: \": 156.25, \"load: \": false, \"save_bodies: \": true}"
