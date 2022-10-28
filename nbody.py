@@ -10,7 +10,7 @@ class Nbody:
     distance_to_moon = 3.84399 * 10 ** 8
     PLUTO_TO_CHARON = 19640 * 1000
     TIMESTEP = 60 #seconds
-    SCALE = 500 / PLUTO_TO_CHARON # 75 / AU or 500 / distance-tomoon
+    SCALE = 500 / distance_to_moon # 75 / AU or 500 / distance-tomoon
 
 
     def __init__(self, x, y, radius, mass, colour, identify):
