@@ -3,10 +3,15 @@ from math import *
 from pylab import *
 import numpy as np
 
+import nbody
+global bodies
 
-def coord(n):  # math credit to https://stackoverflow.com/questions/38562144/simulating-a-logarithmic-spiral-galaxy-in-python
+bodies = []
+n = 1000
+
+def coord(
+        n):  # math credit to https://stackoverflow.com/questions/38562144/simulating-a-logarithmic-spiral-galaxy-in-python
     theta = np.radians(np.linspace(0, 360 * 5, 1000))
-    n = 1000
     a = 1
     b = 0.4
     th = np.random.randn(n)
@@ -31,6 +36,17 @@ def coord(n):  # math credit to https://stackoverflow.com/questions/38562144/sim
     return x, y, x1, y1
 
 
+B_HOLE = nbody.Nbody(0, 0, 20, 8.26 * 10 ** 36, (0, 0, 0), "Black hole")
+bodies.append(B_HOLE)
+x, y, x1, y1, = coord(n)
+k = (n / 2)
+for i in range(n):
+    if i < k:
+        STAR = nbody.Nbody(x[i], y[i], 8, 1.98892 * 10 ** 30, (255,255,255), "star")
+        bodies.append(STAR)
+    else:
+        STAR = nbody.Nbody(x1[i], y1[i], 8,  1.98892 * 10 ** 30, (255, 255, 255), "star")
+        bodies.append(STAR)
 
 
-
+print(len(bodies))
