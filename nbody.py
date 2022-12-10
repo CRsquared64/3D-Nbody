@@ -1,6 +1,6 @@
 import math
 from pynndescent import NNDescent
-
+import numpy as np
 
 WIDTH, HEIGHT = 1920, 1080
 
@@ -34,18 +34,15 @@ class Nbody:
         obj_x = obj.x
         obj_y = obj.y
         obj_z = obj.z
-        obj_dist_x = obj_x - self.x
-        obj_dist_y = obj_y - self.y
-        obj_dist_z = obj_z - self.z
+        obj_dist = np.array([obj_x, obj_y, obj_z]) - np.array([self.x, self.y, self.z])
+        dist = np.linalg.norm(obj_dist)
 
-        dist = math.sqrt((obj_dist_x ** 2) + (obj_dist_y ** 2) + (obj_dist_z ** 2))
         force = self.G * self.mass * obj.mass / dist ** 2
+        force_vector = force * obj_dist / dist
 
-        angle = math.atan2(obj_dist_y, obj_dist_x)
-
-        force_x = math.cos(angle) * force
-        force_y = math.sin(angle) * force
-        force_z = self.G * self.mass * obj.mass * obj_dist_z
+        force_x = force_vector[0]
+        force_y = force_vector[1]
+        force_z = force_vector[2]
 
         return force_x, force_y, force_z
 
