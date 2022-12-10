@@ -20,7 +20,7 @@ class Nbody:
         self.mass = mass
         self.colour = colour
 
-        self.use_approximate_nn = True
+        self.use_approximate_nn = use_approximate_nn
 
         self.trail = []
 
