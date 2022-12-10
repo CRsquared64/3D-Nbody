@@ -1,6 +1,5 @@
 import math
 
-
 WIDTH, HEIGHT = 1920, 1080
 
 
@@ -9,11 +8,10 @@ class Nbody:
     AU = 149.6e6 * 1000
     distance_to_moon = 3.84399 * 10 ** 8
     PLUTO_TO_CHARON = 19640 * 1000
-    TIMESTEP = 60 #seconds
-    SCALE = 500 / distance_to_moon # 75 / AU or 500 / distance-tomoon
+    TIMESTEP = 3600 * 24 * 365 * 10# seconds
+    SCALE = 1 * 10 ** -8 / AU  # 75 / AU or 500 / distance-tomoon
 
-
-    def __init__(self, x, y, radius, mass, colour, identify):
+    def __init__(self, x, y, z, radius, mass, colour, identify):
         self.x = x
         self.y = y
         self.identify = identify
@@ -32,7 +30,6 @@ class Nbody:
         obj_dist_x = obj_x - self.x
         obj_dist_y = obj_y - self.y
 
-
         dist = math.sqrt(obj_dist_x ** 2 + obj_dist_y ** 2)
         force = self.G * self.mass * obj.mass / dist ** 2
 
@@ -41,14 +38,11 @@ class Nbody:
         force_x = math.cos(angle) * force
         force_y = math.sin(angle) * force
 
-
         return force_x, force_y
 
     def position(self, bodies):
         total_force_x = 0
         total_force_y = 0
-
-
 
         for body in bodies:
             if self == body:
@@ -66,22 +60,7 @@ class Nbody:
 
             self.trail.append((self.x, self.y))
 
-    """
-    def plot(self, win):
-        x = self.x * self.SCALE + WIDTH / 2
-        y = self.y * self.SCALE + HEIGHT / 2
 
-        if len(self.trail) > 2:
-            update = []
-            for point in self.trail:
-                x, y = point
-                x = x * self.SCALE + WIDTH / 2
-                y = y * self.SCALE + HEIGHT / 2
-                #update.append((x,y))
-
-            #pygame.draw.lines(win, self.colour, False, update, 2)
-        pygame.draw.circle(win,self.colour, (x,y), self.radius)
-        """
 
     def get_draw_pos(self):
         x = self.x * self.SCALE + WIDTH / 2
@@ -92,5 +71,5 @@ class Nbody:
                 x, y = point
                 x = x * self.SCALE + WIDTH / 2
                 y = y * self.SCALE + HEIGHT / 2
-                self.update.append((x,y))
+                self.update.append((x, y))
         return x, y
