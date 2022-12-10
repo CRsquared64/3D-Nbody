@@ -51,29 +51,36 @@ class Nbody:
 
     def position(self, bodies, nn):
         # Find the approximate nearest neighbors for this body using the NNDescent instance
-        neighbors = nn.query((self.x, self.y, self.z), k=2)
+        if self.use_approximate_nn:
+            neighbors = nn.query((self.x, self.y, self.z), k=2)
+        else:
+            neighbors = bodies
 
         # Compute the total force acting on this body using only the nearest neighbors
         total_force_x = 0
         total_force_y = 0
+        total_force_z = 0
 
         for body in neighbors:
             # Skip this body if it is the same as the current body
             if self == body:
                 continue
 
-            force_x, force_y = self.force(body)
+            force_x, force_y, force_z = self.force(body)
             total_force_x += force_x
             total_force_y += force_y
+            total_force_z += force_z
 
         # Update the velocity and position of this body based on the total force
         self.xv += total_force_x / self.mass * self.TIMESTEP
         self.yv += total_force_y / self.mass * self.TIMESTEP
+        self.zv += total_force_z / self.mass * self.TIMESTEP
 
         self.x += self.xv * self.TIMESTEP
         self.y += self.yv * self.TIMESTEP
+        self.z += self.zv * self.TIMESTEP
 
-        self.trail.append((self.x, self.y))
+        self.trail.append((self.x, self.y, self.z))
 
 
 
