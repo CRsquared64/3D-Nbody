@@ -82,16 +82,16 @@ class Nbody:
 
         self.trail.append((self.x, self.y, self.z))
 
-
-
     def get_draw_pos(self):
         x = self.x * self.SCALE + WIDTH / 2
         y = self.y * self.SCALE + HEIGHT / 2
+        z = self.z * self.SCALE
         self.update = []
         if len(self.trail) > 2:
             for point in self.trail:
-                x, y = point
+                x, y, z = point
                 x = x * self.SCALE + WIDTH / 2
                 y = y * self.SCALE + HEIGHT / 2
-                self.update.append((x, y))
-        return x, y
+                z = z * self.SCALE
+                self.update.append((x, y, z))
+        return x, y, z
