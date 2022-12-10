@@ -1,4 +1,6 @@
 import math
+from pynndescent import NNDescent
+
 
 WIDTH, HEIGHT = 1920, 1080
 
@@ -47,11 +49,16 @@ class Nbody:
 
         return force_x, force_y, force_z
 
-    def position(self, bodies):
+    def position(self, bodies, nn):
+        # Find the approximate nearest neighbors for this body using the NNDescent instance
+        neighbors = nn.query((self.x, self.y, self.z), k=2)
+
+        # Compute the total force acting on this body using only the nearest neighbors
         total_force_x = 0
         total_force_y = 0
 
-        for body in bodies:
+        for body in neighbors:
+            # Skip this body if it is the same as the current body
             if self == body:
                 continue
 
@@ -59,13 +66,14 @@ class Nbody:
             total_force_x += force_x
             total_force_y += force_y
 
-            self.xv += total_force_x / self.mass * self.TIMESTEP
-            self.yv += total_force_y / self.mass * self.TIMESTEP
+        # Update the velocity and position of this body based on the total force
+        self.xv += total_force_x / self.mass * self.TIMESTEP
+        self.yv += total_force_y / self.mass * self.TIMESTEP
 
-            self.x += self.xv * self.TIMESTEP
-            self.y += self.yv * self.TIMESTEP
+        self.x += self.xv * self.TIMESTEP
+        self.y += self.yv * self.TIMESTEP
 
-            self.trail.append((self.x, self.y))
+        self.trail.append((self.x, self.y))
 
 
 
