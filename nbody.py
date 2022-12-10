@@ -38,7 +38,7 @@ class Nbody:
         obj_dist_y = obj_y - self.y
         obj_dist_z = obj_z - self.z
 
-        dist = math.sqrt(obj_dist_x ** 2 + obj_dist_y ** 2 + obj_dist_z ** 2)
+        dist = math.sqrt((obj_dist_x ** 2) + (obj_dist_y ** 2) + (obj_dist_z ** 2))
         force = self.G * self.mass * obj.mass / dist ** 2
 
         angle = math.atan2(obj_dist_y, obj_dist_x)
