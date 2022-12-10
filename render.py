@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from pygame import gfxdraw
+from pynndescent import NNDescent
 
 from tqdm import tqdm
 import nbody
@@ -16,6 +17,8 @@ import json
 import sim.solarSystem
 import sim.earthMoonSystem
 import sim.plutoCharonSystem
+
+import sim.spiralSystem
 
 try:
     os.mkdir('run')
@@ -53,14 +56,14 @@ cycles = ""
 def render():
     global vid_id, cycles
 
-    cycles = 100000
+    cycles = 150
     batches = 32
     batch_size = cycles / batches
 
     load = False
     save_bodies = True
 
-    frame_interval = 24
+    frame_interval = 1
 
     print(f"Config \n"
           f"Cycles: {cycles} \n"
@@ -85,8 +88,12 @@ def render():
 
     clock = pygame.time.Clock()
 
-    bodies = sim.earthMoonSystem.bodies
-    vid_id = sim.earthMoonSystem.video_name
+    bodies = sim.spiralSystem.bodies
+
+    points = [(body.x, body.y, body.z) for body in bodies]
+    nn = NNDescent(points)
+
+    vid_id = sim.spiralSystem.video_name
 
     if save_bodies:
         with open('config/bodies.json', 'wb') as handle:
@@ -102,7 +109,7 @@ def render():
             for i in range(cycles):
                 n = n + 1
                 for n, body in enumerate(bodies):
-                    body.position(bodies)
+                    body.position(bodies, nn)
                     poses[n].append(body.get_draw_pos())
                     pb.update(1)
                     with open('config/nb_run.dat', 'wb') as handle:
@@ -124,13 +131,14 @@ def render():
             pb.update(1)
             clock.tick(60)
             WIN.fill((5, 5, 5))
+
             d_count = i_font.render(f"Days: {(i * body.TIMESTEP) // 86400}", True, (
                 255, 255,
                 255))  # amount of iterations, * timestep = seconds. seconds // 86400 == days OR amount of iterations
             # * timestep = timescale per iteration
             h_count = i_font.render(f"Hours: {(i * body.TIMESTEP) // 3600}", True, (255, 255, 255))
             iterations = i_font.render(f"Iterations: {i}", True, (255, 255, 255))
-            count_bodies = i_font.render(f"Amount of Bodies: {len(bodies)}", True, (255,255,255))
+            count_bodies = i_font.render(f"Amount of Bodies: {len(bodies)}", True, (255, 255, 255))
 
             WIN.blit(d_count, (0, 0))
             WIN.blit(h_count, (0, 25))
@@ -142,19 +150,23 @@ def render():
                     x, y = poses[n][i]
                     x = int(x)
                     y = int(y)
+                    print((x, y))
 
                     trails[n].append((x, y))
 
-                    text = font.render(body.identify, True, body.colour)
-                    WIN.blit(text, dest=(x + 5, y))
-                    if len(trails[n]) > 2:
-                        pygame.draw.lines(WIN, body.colour, False, trails[n], 2)
+                    try:
+                        text = font.render(body.identify, True, body.colour)
+                        WIN.blit(text, dest=(x, y))
 
+                        if len(trails[n]) > 2:
+                            pygame.draw.lines(WIN, body.colour, False, trails[n], 2)
 
+                        # pygame.draw.circle(WIN, body.colour, (x, y), body.radius)  old method
+                        gfxdraw.aacircle(WIN, x, y, body.radius, body.colour)
+                        gfxdraw.filled_circle(WIN, x, y, body.radius, body.colour)
 
-                    # pygame.draw.circle(WIN, body.colour, (x, y), body.radius)  old method
-                    gfxdraw.aacircle(WIN, x, y, body.radius, body.colour)
-                    gfxdraw.filled_circle(WIN, x, y, body.radius, body.colour)
+                    except:
+                        pass
 
                     total_KE = i_font.render(f"Total Kinetic Energy: {0.5 * (body.yv + body.xv) * body.mass}", True,
                                              (255, 255, 255))
