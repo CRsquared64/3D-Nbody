@@ -1,4 +1,5 @@
 import math
+from pynndescent import NNDescent
 
 
 WIDTH, HEIGHT = 1920, 1080
@@ -9,88 +10,88 @@ class Nbody:
     AU = 149.6e6 * 1000
     distance_to_moon = 3.84399 * 10 ** 8
     PLUTO_TO_CHARON = 19640 * 1000
-    TIMESTEP = 60 #seconds
-    SCALE = 500 / distance_to_moon # 75 / AU or 500 / distance-tomoon
+    TIMESTEP = 3600 * 24 * 365 * 10# seconds
+    SCALE = 1 * 10 ** -8 / AU  # 75 / AU or 500 / distance-tomoon
 
-
-    def __init__(self, x, y, radius, mass, colour, identify):
+    def __init__(self, x, y, z, radius, mass, colour, identify, use_approximate_nn=False):
         self.x = x
         self.y = y
+        self.z = z
         self.identify = identify
         self.radius = radius
         self.mass = mass
         self.colour = colour
 
+        self.use_approximate_nn = use_approximate_nn
+
         self.trail = []
 
         self.xv = 0
         self.yv = 0
+        self.zv = 0
 
     def force(self, obj):
         obj_x = obj.x
         obj_y = obj.y
+        obj_z = obj.z
         obj_dist_x = obj_x - self.x
         obj_dist_y = obj_y - self.y
+        obj_dist_z = obj_z - self.z
 
-
-        dist = math.sqrt(obj_dist_x ** 2 + obj_dist_y ** 2)
+        dist = math.sqrt(obj_dist_x ** 2 + obj_dist_y ** 2 + obj_dist_z ** 2)
         force = self.G * self.mass * obj.mass / dist ** 2
 
         angle = math.atan2(obj_dist_y, obj_dist_x)
 
         force_x = math.cos(angle) * force
         force_y = math.sin(angle) * force
+        force_z = self.G * self.mass * obj.mass * obj_dist_z
 
+        return force_x, force_y, force_z
 
-        return force_x, force_y
+    def position(self, bodies, nn):
+        # Find the approximate nearest neighbors for this body using the NNDescent instance
+        if self.use_approximate_nn:
+            neighbors = nn.query((self.x, self.y, self.z), k=2)
+        else:
+            neighbors = bodies
 
-    def position(self, bodies):
+        # Compute the total force acting on this body using only the nearest neighbors
         total_force_x = 0
         total_force_y = 0
+        total_force_z = 0
 
-
-
-        for body in bodies:
+        for body in neighbors:
+            # Skip this body if it is the same as the current body
             if self == body:
                 continue
 
-            force_x, force_y = self.force(body)
+            force_x, force_y, force_z = self.force(body)
             total_force_x += force_x
             total_force_y += force_y
+            total_force_z += force_z
 
-            self.xv += total_force_x / self.mass * self.TIMESTEP
-            self.yv += total_force_y / self.mass * self.TIMESTEP
+        # Update the velocity and position of this body based on the total force
+        self.xv += total_force_x / self.mass * self.TIMESTEP
+        self.yv += total_force_y / self.mass * self.TIMESTEP
+        self.zv += total_force_z / self.mass * self.TIMESTEP
 
-            self.x += self.xv * self.TIMESTEP
-            self.y += self.yv * self.TIMESTEP
+        self.x += self.xv * self.TIMESTEP
+        self.y += self.yv * self.TIMESTEP
+        self.z += self.zv * self.TIMESTEP
 
-            self.trail.append((self.x, self.y))
-
-    """
-    def plot(self, win):
-        x = self.x * self.SCALE + WIDTH / 2
-        y = self.y * self.SCALE + HEIGHT / 2
-
-        if len(self.trail) > 2:
-            update = []
-            for point in self.trail:
-                x, y = point
-                x = x * self.SCALE + WIDTH / 2
-                y = y * self.SCALE + HEIGHT / 2
-                #update.append((x,y))
-
-            #pygame.draw.lines(win, self.colour, False, update, 2)
-        pygame.draw.circle(win,self.colour, (x,y), self.radius)
-        """
+        self.trail.append((self.x, self.y, self.z))
 
     def get_draw_pos(self):
         x = self.x * self.SCALE + WIDTH / 2
         y = self.y * self.SCALE + HEIGHT / 2
+        z = self.z * self.SCALE
         self.update = []
         if len(self.trail) > 2:
             for point in self.trail:
-                x, y = point
+                x, y, z = point
                 x = x * self.SCALE + WIDTH / 2
                 y = y * self.SCALE + HEIGHT / 2
-                self.update.append((x,y))
-        return x, y
+                z = z * self.SCALE
+                self.update.append((x, y, z))
+        return x, y, z
