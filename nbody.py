@@ -11,7 +11,7 @@ class Nbody:
     TIMESTEP = 3600 * 24 * 365 * 10# seconds
     SCALE = 1 * 10 ** -8 / AU  # 75 / AU or 500 / distance-tomoon
 
-    def __init__(self, x, y, z, radius, mass, colour, identify):
+    def __init__(self, x, y, z, radius, mass, colour, identify, use_approximate_nn=False):
         self.x = x
         self.y = y
         self.z = z
@@ -19,6 +19,8 @@ class Nbody:
         self.radius = radius
         self.mass = mass
         self.colour = colour
+
+        self.use_approximate_nn = True
 
         self.trail = []
 
