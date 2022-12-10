@@ -14,6 +14,7 @@ class Nbody:
     def __init__(self, x, y, z, radius, mass, colour, identify):
         self.x = x
         self.y = y
+        self.z = z
         self.identify = identify
         self.radius = radius
         self.mass = mass
@@ -23,12 +24,15 @@ class Nbody:
 
         self.xv = 0
         self.yv = 0
+        self.zv = 0
 
     def force(self, obj):
         obj_x = obj.x
         obj_y = obj.y
+        obj_z = obj.z
         obj_dist_x = obj_x - self.x
         obj_dist_y = obj_y - self.y
+        obj_dist_z = obj_z - self.z
 
         dist = math.sqrt(obj_dist_x ** 2 + obj_dist_y ** 2)
         force = self.G * self.mass * obj.mass / dist ** 2
