@@ -1,4 +1,6 @@
+import numpy as np
 import pygame
+
 from pygame.locals import *
 from pygame import gfxdraw
 from pynndescent import NNDescent
@@ -15,10 +17,10 @@ import shutil
 import json
 
 import sim.solarSystem
-import sim.earthMoonSystem
-import sim.plutoCharonSystem
-
-import sim.spiralSystem
+import OpenGL
+from OpenGL.GL import *
+from OpenGL.GLU import *
+from OpenGL.GLUT import *
 
 try:
     os.mkdir('run')
@@ -54,6 +56,16 @@ cycles = ""
 
 
 def render():
+    pygame.init()
+    WIN = pygame.display.set_mode((WIDTH, HEIGHT), OPENGL)
+    pygame.display.set_caption("N-Body Simulation")
+
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluPerspective(45, WIDTH / HEIGHT, 0.1, 50.0)
+    glMatrixMode(GL_MODELVIEW)
+
+
     global vid_id, cycles
 
     cycles = 150
@@ -88,12 +100,14 @@ def render():
 
     clock = pygame.time.Clock()
 
-    bodies = sim.spiralSystem.bodies
+    bodies = sim.solarSystem.bodies
 
     points = [(body.x, body.y, body.z) for body in bodies]
-    nn = NNDescent(points)
 
-    vid_id = sim.spiralSystem.video_name
+    points_array = np.array(points)
+
+    nn = NNDescent(points_array)
+    vid_id = sim.solarSystem.video_name
 
     if save_bodies:
         with open('config/bodies.json', 'wb') as handle:
@@ -121,58 +135,44 @@ def render():
             poses = pickle.load(handle)
 
     print("Rendering Frames")
-    WIN = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
+
     trails = []
     for n in range(len(bodies)):
         trails.append([])
+    frame_counter = 0
+
     with tqdm(total=len(poses[0])) as pb:
-
         for i in range(len(poses[0])):
+            # Set the background color to black
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+
+            # Reset the model-view matrix and set the camera position and orientation
+            glLoadIdentity()
+            gluLookAt(0, 0, 10, 0, 0, 0, 0, 1, 0)
+
+            for n, body in enumerate(bodies):
+
+                # Draw the trail
+                glBegin(GL_LINE_STRIP)
+                for x, y, z in body.update:
+                    glColor3f(body.colour[0], body.colour[1], body.colour[2])
+                    glVertex3f(x, y, z)
+                glEnd()
+
+                # Draw the sphere
+                glPushMatrix()
+                glTranslatef(body.x, body.y, body.z)
+                glColor3f(body.colour[0], body.colour[1], body.colour[2])
+                glutSolidSphere(body.radius, 20, 20)
+                glPopMatrix()
+
+            # Update the screen to show the drawn spheres and trails
+            pygame.display.flip()
+
             pb.update(1)
-            clock.tick(60)
-            WIN.fill((5, 5, 5))
 
-            d_count = i_font.render(f"Days: {(i * body.TIMESTEP) // 86400}", True, (
-                255, 255,
-                255))  # amount of iterations, * timestep = seconds. seconds // 86400 == days OR amount of iterations
-            # * timestep = timescale per iteration
-            h_count = i_font.render(f"Hours: {(i * body.TIMESTEP) // 3600}", True, (255, 255, 255))
-            iterations = i_font.render(f"Iterations: {i}", True, (255, 255, 255))
-            count_bodies = i_font.render(f"Amount of Bodies: {len(bodies)}", True, (255, 255, 255))
-
-            WIN.blit(d_count, (0, 0))
-            WIN.blit(h_count, (0, 25))
-            WIN.blit(iterations, (0, 50))
-            WIN.blit(count_bodies, (0, 100))
-
-            if i % frame_interval == 0:
-                for n, body in enumerate(bodies):
-                    x, y = poses[n][i]
-                    x = int(x)
-                    y = int(y)
-                    print((x, y))
-
-                    trails[n].append((x, y))
-
-                    try:
-                        text = font.render(body.identify, True, body.colour)
-                        WIN.blit(text, dest=(x, y))
-
-                        if len(trails[n]) > 2:
-                            pygame.draw.lines(WIN, body.colour, False, trails[n], 2)
-
-                        # pygame.draw.circle(WIN, body.colour, (x, y), body.radius)  old method
-                        gfxdraw.aacircle(WIN, x, y, body.radius, body.colour)
-                        gfxdraw.filled_circle(WIN, x, y, body.radius, body.colour)
-
-                    except:
-                        pass
-
-                    total_KE = i_font.render(f"Total Kinetic Energy: {0.5 * (body.yv + body.xv) * body.mass}", True,
-                                             (255, 255, 255))
-                    WIN.blit(total_KE, (0, 75))
-
-                    pygame.image.save(WIN, f'run/nb_frame0{i}.jpg')
+            pygame.image.save(WIN, f'run/solar_system{frame_counter}.jpg')
+            frame_counter += 1
 
     # pygame.display.update()
     print("Render Done!")
