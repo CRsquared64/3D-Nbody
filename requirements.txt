@@ -12,3 +12,5 @@ llvmlite~=0.38.1
 setuptools~=60.2.0
 packaging~=21.3
 pyparsing~=3.0.9
+pynndescent~=0.5.8
+pyopengl
