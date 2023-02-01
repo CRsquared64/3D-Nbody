@@ -49,19 +49,16 @@ class Nbody:
         return force_x, force_y, force_z
 
     def position(self, bodies, nn):
-        # Find the approximate nearest neighbors for this body using the NNDescent instance
         if self.use_approximate_nn:
             neighbors = nn.query((self.x, self.y, self.z), k=2)
         else:
             neighbors = bodies
 
-        # Compute the total force acting on this body using only the nearest neighbors
         total_force_x = 0
         total_force_y = 0
         total_force_z = 0
 
         for body in neighbors:
-            # Skip this body if it is the same as the current body
             if self == body:
                 continue
 
