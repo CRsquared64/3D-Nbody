@@ -31,8 +31,9 @@ def getPos(bodies, cycles):
                 poses[n].append(body.get_draw_pos())
                 pb.update(1)
             if i % batch_size == 0:
-                with open('nbodies.pos', 'a') as handle:
-                    handle.write(poses)
+                with open('nbodies.pos', 'ab') as handle:
+                    pickle.dump(poses, handle)
+
 
 
 getPos(sim.solarSystem.bodies, 128)
