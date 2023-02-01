@@ -6,7 +6,7 @@ WIDTH, HEIGHT = 1920, 1080
 
 
 class Nbody:
-    G = 6.67428e-11
+    G = 6.67428e-11 # can also be 1, makes some difference
     AU = 149.6e6 * 1000
     distance_to_moon = 3.84399 * 10 ** 8
     PLUTO_TO_CHARON = 19640 * 1000

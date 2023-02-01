@@ -65,7 +65,6 @@ def render():
     gluPerspective(45, WIDTH / HEIGHT, 0.1, 50.0)
     glMatrixMode(GL_MODELVIEW)
 
-
     global vid_id, cycles
 
     cycles = 150
@@ -154,7 +153,7 @@ def render():
 
             for n, body in enumerate(bodies):
 
-                #Draw the trail
+                # Draw the trail
                 glBegin(GL_LINE_STRIP)
                 for x, y, z in body.update:
                     glColor3f(body.colour[0], body.colour[1], body.colour[2])
@@ -164,13 +163,12 @@ def render():
                 modelview_matrix = glGetDoublev(GL_MODELVIEW_MATRIX)
                 projection_matrix = glGetDoublev(GL_PROJECTION_MATRIX)
 
-
                 viewport = glGetIntegerv(GL_VIEWPORT)
 
                 win_x, win_y, win_z = gluProject(body.x, body.y, body.z, modelview_matrix, projection_matrix, viewport)
 
                 if win_x >= 0 and win_x <= WIDTH and win_y >= 0 and win_y <= HEIGHT:
-                    #sphere no on screen
+                    # sphere no on screen
                     print("On Screen")
                     glPushMatrix()
                     glTranslatef(body.x, body.y, body.z)
@@ -179,12 +177,10 @@ def render():
                     gluSphere(quadric, body.radius, 20, 20)
                     glPopMatrix()
                 else:
-                    print(f"modelview_matrix: {modelview_matrix}, projection_matrix: {projection_matrix}, win_x/y/z: {win_x, win_y, win_z}")
+                    print(
+                        f"modelview_matrix: {modelview_matrix}, projection_matrix: {projection_matrix}, win_x/y/z: {win_x, win_y, win_z}")
 
                     continue
-
-
-
 
             # Update the screen to show the drawn spheres and trails
             pygame.display.flip()
