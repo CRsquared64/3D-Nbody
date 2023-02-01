@@ -65,7 +65,6 @@ def render():
     gluPerspective(45, WIDTH / HEIGHT, 0.1, 50.0)
     glMatrixMode(GL_MODELVIEW)
 
-
     global vid_id, cycles
 
     cycles = 150
@@ -143,12 +142,14 @@ def render():
 
     with tqdm(total=len(poses[0])) as pb:
         for i in range(len(poses[0])):
-            # Set the background color to black
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+            glClear(GL_COLOR_BUFFER_BIT)
 
-            # Reset the model-view matrix and set the camera position and orientation
-            glLoadIdentity()
-            gluLookAt(0, 0, 10, 0, 0, 0, 0, 1, 0)
+            center_x, center_y, center_z = bodies[0].get_draw_pos()
+
+            eye_x, eye_y, eye_z = center_x, center_y, center_z + 10
+            up_x, up_y, up_z = 0, 1, 0
+
+            gluLookAt(eye_x, eye_y, eye_z, center_x, center_y, center_z, up_x, up_y, up_z)
 
             for n, body in enumerate(bodies):
 
@@ -159,12 +160,27 @@ def render():
                     glVertex3f(x, y, z)
                 glEnd()
 
-                # Draw the sphere
-                glPushMatrix()
-                glTranslatef(body.x, body.y, body.z)
-                glColor3f(body.colour[0], body.colour[1], body.colour[2])
-                glutSolidSphere(body.radius, 20, 20)
-                glPopMatrix()
+                modelview_matrix = glGetDoublev(GL_MODELVIEW_MATRIX)
+                projection_matrix = glGetDoublev(GL_PROJECTION_MATRIX)
+
+                viewport = glGetIntegerv(GL_VIEWPORT)
+
+                win_x, win_y, win_z = gluProject(body.x, body.y, body.z, modelview_matrix, projection_matrix, viewport)
+
+                if win_x >= 0 and win_x <= WIDTH and win_y >= 0 and win_y <= HEIGHT:
+                    # sphere no on screen
+                    print("On Screen")
+                    glPushMatrix()
+                    glTranslatef(body.x, body.y, body.z)
+                    quadric = gluNewQuadric()
+                    glColor3f(body.colour[0], body.colour[1], body.colour[2])
+                    gluSphere(quadric, body.radius, 20, 20)
+                    glPopMatrix()
+                else:
+                    print(
+                        f"modelview_matrix: {modelview_matrix}, projection_matrix: {projection_matrix}, win_x/y/z: {win_x, win_y, win_z}")
+
+                    continue
 
             # Update the screen to show the drawn spheres and trails
             pygame.display.flip()

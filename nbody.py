@@ -6,12 +6,14 @@ WIDTH, HEIGHT = 1920, 1080
 
 
 class Nbody:
-    G = 6.67428e-11
+    G = 6.67428e-11 # can also be 1, makes some difference
     AU = 149.6e6 * 1000
     distance_to_moon = 3.84399 * 10 ** 8
     PLUTO_TO_CHARON = 19640 * 1000
     TIMESTEP = 3600 * 24# seconds
-    SCALE = 1 * 10 ** -8 / AU  # 75 / AU or 500 / distance-tomoon
+    SCALE = 75 * 10 ** -20   # 75 / AU or 500 / distance-tomoon
+    #106983694 = y
+    
 
     def __init__(self, x, y, z, radius, mass, colour, identify, use_approximate_nn=False):
         self.x = x
@@ -47,19 +49,16 @@ class Nbody:
         return force_x, force_y, force_z
 
     def position(self, bodies, nn):
-        # Find the approximate nearest neighbors for this body using the NNDescent instance
         if self.use_approximate_nn:
             neighbors = nn.query((self.x, self.y, self.z), k=2)
         else:
             neighbors = bodies
 
-        # Compute the total force acting on this body using only the nearest neighbors
         total_force_x = 0
         total_force_y = 0
         total_force_z = 0
 
         for body in neighbors:
-            # Skip this body if it is the same as the current body
             if self == body:
                 continue
 
