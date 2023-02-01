@@ -1,19 +1,17 @@
-import math
-from pynndescent import NNDescent
 import numpy as np
 
 WIDTH, HEIGHT = 1920, 1080
 
 
 class Nbody:
-    G = 6.67428e-11 # can also be 1, makes some difference
+    G = 6.67428e-11  # can also be 1, makes some difference
     AU = 149.6e6 * 1000
     distance_to_moon = 3.84399 * 10 ** 8
     PLUTO_TO_CHARON = 19640 * 1000
-    TIMESTEP = 3600 * 24# seconds
-    SCALE = 75 * 10 ** -20   # 75 / AU or 500 / distance-tomoon
-    #106983694 = y
-    
+    TIMESTEP = 3600 * 24  # seconds
+    SCALE = 75 * 10 ** -20  # 75 / AU or 500 / distance-tomoon
+
+    # 106983694 = y
 
     def __init__(self, x, y, z, radius, mass, colour, identify, use_approximate_nn=False):
         self.x = x
@@ -82,12 +80,4 @@ class Nbody:
         x = self.x * self.SCALE + WIDTH / 2
         y = self.y * self.SCALE + HEIGHT / 2
         z = self.z * self.SCALE
-        self.update = []
-        if len(self.trail) > 2:
-            for point in self.trail:
-                x, y, z = point
-                x = x * self.SCALE + WIDTH / 2
-                y = y * self.SCALE + HEIGHT / 2
-                z = z * self.SCALE
-                self.update.append((x, y, z))
         return x, y, z
