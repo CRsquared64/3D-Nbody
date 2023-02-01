@@ -33,7 +33,8 @@ def getPos(bodies, cycles):
             if i % batch_size == 0:
                 with open('nbodies.pos', 'ab') as handle:
                     pickle.dump(poses, handle)
+                    poses = [[] for i in range(len(bodies))]
 
 
 
-getPos(sim.solarSystem.bodies, 128)
+getPos(sim.solarSystem.bodies, 1024)
