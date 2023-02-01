@@ -21,7 +21,6 @@ def getPos(bodies, cycles):
 
     poses = [[] for i in range(len(bodies))]
     amount = len(bodies) * cycles
-
     n = 0
     print("Calculating Positions")
     with tqdm(total=amount) as pb:
@@ -32,7 +31,8 @@ def getPos(bodies, cycles):
                 poses[n].append(body.get_draw_pos())
                 pb.update(1)
             if i % batch_size == 0:
-                with open('')
+                with open('nbodies.pos', 'a') as handle:
+                    handle.write(poses)
 
 
 getPos(sim.solarSystem.bodies, 128)
