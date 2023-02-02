@@ -3,7 +3,6 @@
 import pickle
 import sim.solarSystem
 
-import numpy as np
 from tqdm import tqdm
 
 
@@ -27,5 +26,6 @@ def getPos(bodies, cycles):
                 with open('nbodies.pos', 'ab') as handle:
                     pickle.dump(poses, handle)
                     poses = [[] for i in range(len(bodies))]
+    return poses
 
 
