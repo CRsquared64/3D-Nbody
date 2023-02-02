@@ -4,7 +4,6 @@ numba~=0.55.1
 tqdm~=4.64.0
 opencv-python~=4.6.0.66
 numpy~=1.22.4
-pip~=21.3.1
 wheel~=0.37.1
 colorama~=0.4.5
 PyYAML~=6.0
