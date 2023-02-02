@@ -29,4 +29,3 @@ def getPos(bodies, cycles):
                     poses = [[] for i in range(len(bodies))]
 
 
-getPos(sim.solarSystem.bodies, 4000000000)
