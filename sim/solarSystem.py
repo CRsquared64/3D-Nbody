@@ -6,8 +6,8 @@ global bodies
 
 SUN = nbody.Nbody(0, 0, 0, 15, 1.98892 * 10 ** 30, (255, 165, 0), "sun")
 
-EARTH = nbody.Nbody(-1 * nbody.Nbody.AU, 2, 3, 4, 5.9742 * 10 ** 24, (0, 0, 255), "earth", False)
-EARTH.yv = 29.783 * 1000
+EARTH = nbody.Nbody(-1 * nbody.Nbody.AU, 2, 3, 6.3781*10**6, 5.9742 * 10 ** 24, (0, 0, 255), "earth", False)
+EARTH.yv = 29.783 * 100
 MARS = nbody.Nbody(-1.524 * nbody.Nbody.AU, 0, 0, 3, 6.39 * 10 ** 23, (255, 25, 0), "mars")
 MARS.yv = 24.077 * 1000
 VENUS = nbody.Nbody(0.723 * nbody.Nbody.AU, 0, 0, 3, 4.865 * 10 ** 24, (255, 255, 255), "venus")
@@ -25,7 +25,9 @@ JUPITER.yv = 13.07 * 1000
 SATURN = nbody.Nbody(-9.5 * nbody.Nbody.AU, 0, 6, 0, 5.683 * 10 ** 26, (255, 253, 208), "saturn")
 SATURN.yv = 9.69 * 1000
 
+TEST_OBJ = nbody.Nbody(1000, 0, 0, 100, 1, (255, 253, 208), "FUCKING OBJECT")
+TEST_OBJ.xv = 100000
 
 
-bodies = [SUN, MARS, VENUS, MERCURY, EARTH, JUPITER, SATURN]
+bodies = [TEST_OBJ]
 video_name = "SolarSystem"

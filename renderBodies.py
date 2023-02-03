@@ -81,7 +81,12 @@ def setup(width, height, name):
 
 def draw_circle(x, y, z, radius, cx, cy, cz, cro, cpi, cya, width, height, fov, surface):
     x, y, z = project(x, y, z, cx, cy, cz, cro, cpi, cya, width, height, fov)
-    pygame.draw.circle(surface, (255, 255, 255), (x, y), z*radius)
+
+    distance = sqrt((cx-x)**2+(cy-y)**2+(cz-z)**2)
+    angle = degrees(atan(bdiv(radius, distance)))
+    print(angle)
+
+    pygame.draw.circle(surface, (255, 255, 255), (x, y), (angle/fov)*width)
 
 
 def draw(positions, cx, cy, cz, cro, cpi, cya, width, height, fov, surface):
@@ -100,7 +105,7 @@ def easy_animate(positions_through_time, W, H, name):
     capture = True
     clock = pygame.time.Clock()
     for positions in positions_through_time:
-        print(positions)
+        #print(positions)
         draw(positions, 0, 0, 0, roll, pitch, yaw, W, H, 90, window)
 
         if capture and pygame.mouse.get_focused():
@@ -110,9 +115,9 @@ def easy_animate(positions_through_time, W, H, name):
             dx = x - W / 2
             dy = y - H / 2
 
-            pitch -= dy
+            pitch += dy
             yaw -= dx
-            print(pitch, yaw)
+        print(pitch, yaw)
 
         for event in pygame.event.get():
             if event.type == pygame.KEYUP:
@@ -171,7 +176,6 @@ if __name__ == "__main__":  # Testing
 
             pitch -= dy
             yaw -= dx
-            print(pitch, yaw)
 
         for event in pygame.event.get():
             if event.type == pygame.KEYUP:
