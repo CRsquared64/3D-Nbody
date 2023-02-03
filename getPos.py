@@ -6,7 +6,7 @@ import sim.solarSystem
 from tqdm import tqdm
 
 
-def getPos(bodies, cycles):
+def get_pos(bodies, cycles):
     batches = 1
     batch_size = cycles // batches
     nn = False

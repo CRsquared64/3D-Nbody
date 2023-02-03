@@ -2,7 +2,7 @@
 import pickle
 
 
-def fileLoad(file):
+def file_load(file):
     try:
         with open(file, 'rb') as handle:
             poses = pickle.load(handle)
