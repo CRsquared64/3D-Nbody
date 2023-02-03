@@ -19,7 +19,8 @@ def get_pos(bodies, cycles):
         for i in range(cycles):
             for n, body in enumerate(bodies):
                 body.position(bodies, nn)
-                poses[n].append(body.get_draw_pos())
+                poses[n].append((*body.get_draw_pos(), body.radius))
+
                 pb.update(1)
             if i % batch_size == 0:
                 # print(f"Great Sucess {i}")
@@ -27,5 +28,4 @@ def get_pos(bodies, cycles):
                     pickle.dump(poses, handle)
                     poses = [[] for i in range(len(bodies))]
     return poses
-
 

@@ -38,3 +38,5 @@ if __name__ == '__main__':
     else:
         poses = fileHandler.file_load(file)
         print(f"Loaded positions from {file}")
+
+        print(poses)

@@ -96,9 +96,9 @@ if __name__ == "__main__":  # Testing
 
     # Testing data generation info
     BOUNDING_BOX = 100
-    AMOUNT = 1000
-    RADIUS_MIN = 900
-    RADIUS_MAX = 1000
+    AMOUNT = 100000
+    RADIUS_MIN = 90
+    RADIUS_MAX = 100
     SPEED_MIN = 0
     SPEED_MAX = 1
 
