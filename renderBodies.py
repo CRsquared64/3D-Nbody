@@ -85,10 +85,40 @@ def draw_circle(x, y, z, radius, cx, cy, cz, cro, cpi, cya, width, height, fov, 
 
 
 def draw(positions, cx, cy, cz, cro, cpi, cya, width, height, fov, surface):
-    window.fill((0, 0, 0))
+    surface.fill((0, 0, 0))
     for x, y, z, radius in positions:
         draw_circle(x, y, z, radius, cx, cy, cz, cro, cpi, cya, width, height, fov, surface)
     pygame.display.update()
+
+
+def easy_animate(positions_through_time, W, H, name):
+    window = setup(W, H, name)
+
+    roll = 0
+    pitch = 0
+    yaw = 0
+    capture = True
+    clock = pygame.time.Clock()
+    for positions in positions_through_time:
+        draw(positions, 0, 0, 0, roll, pitch, yaw, W, H, 90, window)
+
+        if capture and pygame.mouse.get_focused():
+            x, y = pygame.mouse.get_pos()
+            pygame.mouse.set_pos(W / 2, H / 2)
+
+            dx = x - W / 2
+            dy = y - H / 2
+
+            pitch -= dy
+            yaw -= dx
+            print(pitch, yaw)
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_ESCAPE:
+                    capture = False
+
+        clock.tick(24)
 
 
 if __name__ == "__main__":  # Testing
@@ -96,9 +126,9 @@ if __name__ == "__main__":  # Testing
 
     # Testing data generation info
     BOUNDING_BOX = 100
-    AMOUNT = 100000
-    RADIUS_MIN = 90
-    RADIUS_MAX = 100
+    AMOUNT = 1000
+    RADIUS_MIN = 900
+    RADIUS_MAX = 1000
     SPEED_MIN = 0
     SPEED_MAX = 1
 

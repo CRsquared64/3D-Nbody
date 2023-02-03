@@ -1,12 +1,10 @@
-import sys
 import os
-import pygame
 import shutil
+import sys
 
+import fileHandler
 import getPos
 import renderBodies
-import fileHandler
-
 import sim.solarSystem
 
 # import sim.earthMoonSystem
@@ -39,4 +37,4 @@ if __name__ == '__main__':
         poses = fileHandler.file_load(file)
         print(f"Loaded positions from {file}")
 
-        print(poses)
+    renderBodies.easy_animate(poses, 500, 500, "doing ur mom")
