@@ -22,11 +22,6 @@ except OSError as error:
 WIDTH, HEIGHT = 1920, 1080
 FPS = 60
 
-pygame.font.init()
-
-font = pygame.font.Font(pygame.font.get_default_font(), 12)
-i_font = pygame.font.Font(pygame.font.get_default_font(), 24)
-
 CYCLES = 1024
 BODIES = sim.solarSystem.bodies
 
@@ -38,8 +33,8 @@ file = str(sys.argv[1])
 if __name__ == '__main__':
     if not load:
         print(f"Generating {len(BODIES)} bodies, for {CYCLES} cycles.")
-        poses = getPos.getPos(BODIES, CYCLES)
+        poses = getPos.get_pos(BODIES, CYCLES)
         print("Generation Finished")
     else:
-        poses = fileHandler.fileLoad(file)
+        poses = fileHandler.file_load(file)
         print(f"Loaded positions from {file}")
