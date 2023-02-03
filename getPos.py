@@ -1,14 +1,14 @@
 # here jon, will this make you HAPPY?!?!?!?!?
 
 import pickle
-import sim.solarSystem
 
 from tqdm import tqdm
+
+import sim.solarSystem
 
 
 def get_pos(bodies, cycles):
     batches = 1
-    batch_size = cycles // batches
     nn = False
     vid_id = sim.solarSystem.video_name
 
@@ -22,10 +22,8 @@ def get_pos(bodies, cycles):
                 poses[n].append((*body.get_draw_pos(), body.radius))
 
                 pb.update(1)
-            if i % batch_size == 0:
-                # print(f"Great Sucess {i}")
-                with open('nbodies.pos', 'ab') as handle:
-                    pickle.dump(poses, handle)
-                    poses = [[] for i in range(len(bodies))]
+    with open('nbodies.pos', 'wb') as handle:
+        pickle.dump(poses, handle)
     return poses
 
+get_pos(sim.solarSystem.bodies, 500)

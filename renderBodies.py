@@ -100,6 +100,7 @@ def easy_animate(positions_through_time, W, H, name):
     capture = True
     clock = pygame.time.Clock()
     for positions in positions_through_time:
+        print(positions)
         draw(positions, 0, 0, 0, roll, pitch, yaw, W, H, 90, window)
 
         if capture and pygame.mouse.get_focused():
