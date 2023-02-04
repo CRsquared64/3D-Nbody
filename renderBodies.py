@@ -64,12 +64,9 @@ def project(x, y, z, cx, cy, cz, cro, cpi, cya, width, height, fov):
     x, y, z = rotateZ(x, y, z, -cya)
 
     if x < 0:
-        return 0, 0, 0  # Factor of 0
+        return None
+    return (y/fov + 0.5) * width, (z/(fov * width/height) + 0.5) * height
 
-    factor = bdiv(atan(radians(180 - fov) / 2), x)
-    y = y * factor * width + height / 2
-    z = -z * factor * width + height / 2
-    return y, z, factor
 
 
 def setup(width, height, name):
@@ -80,13 +77,10 @@ def setup(width, height, name):
 
 
 def draw_circle(x, y, z, radius, cx, cy, cz, cro, cpi, cya, width, height, fov, surface):
-    x, y, z = project(x, y, z, cx, cy, cz, cro, cpi, cya, width, height, fov)
-
-    distance = sqrt((cx-x)**2+(cy-y)**2+(cz-z)**2)
-    angle = degrees(atan(bdiv(radius, distance)))
-    print(angle)
-
-    pygame.draw.circle(surface, (255, 255, 255), (x, y), (angle/fov)*width)
+    location = project(x, y, z, cx, cy, cz, cro, cpi, cya, width, height, fov)
+    if location is None:
+        return
+    pygame.draw.circle(surface, (255, 255, 255), location, radius/fov*width)
 
 
 def draw(positions, cx, cy, cz, cro, cpi, cya, width, height, fov, surface):
@@ -106,18 +100,18 @@ def easy_animate(positions_through_time, W, H, name):
     clock = pygame.time.Clock()
     for positions in positions_through_time:
         #print(positions)
-        draw(positions, 0, 0, 0, roll, pitch, yaw, W, H, 90, window)
+        draw(positions, 0, 0, 0, roll, pitch, yaw, W, H, 10000, window)
 
         if capture and pygame.mouse.get_focused():
-            x, y = pygame.mouse.get_pos()
-            pygame.mouse.set_pos(W / 2, H / 2)
+            x, y = 0, 0#pygame.mouse.get_pos()
+            #pygame.mouse.set_pos(W / 2, H / 2)
 
-            dx = x - W / 2
-            dy = y - H / 2
+            #dx = x - W / 2
+            #dy = y - H / 2
 
-            pitch += dy
-            yaw -= dx
-        print(pitch, yaw)
+            #pitch += dy
+            #yaw -= dx
+        #print(pitch, yaw)
 
         for event in pygame.event.get():
             if event.type == pygame.KEYUP:

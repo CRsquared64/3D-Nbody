@@ -25,9 +25,6 @@ JUPITER.yv = 13.07 * 1000
 SATURN = nbody.Nbody(-9.5 * nbody.Nbody.AU, 0, 6, 0, 5.683 * 10 ** 26, (255, 253, 208), "saturn")
 SATURN.yv = 9.69 * 1000
 
-TEST_OBJ = nbody.Nbody(1000, 0, 0, 100, 1, (255, 253, 208), "FUCKING OBJECT")
-TEST_OBJ.xv = 100000
 
-
-bodies = [TEST_OBJ]
+bodies = []
 video_name = "SolarSystem"

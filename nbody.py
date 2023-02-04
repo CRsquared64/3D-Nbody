@@ -77,7 +77,7 @@ class Nbody:
         self.trail.append((self.x, self.y, self.z))
 
     def get_draw_pos(self):
-        x = self.x * self.SCALE + WIDTH / 2
-        y = self.y * self.SCALE + HEIGHT / 2
-        z = self.z * self.SCALE
+        x = self.x
+        y = self.y
+        z = self.z
         return x, y, z
