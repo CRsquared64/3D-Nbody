@@ -3,6 +3,8 @@ from math import *
 
 import pygame.display
 
+import nbody
+
 
 #      x*     y*     z*
 #  x =  1      0      0
@@ -80,7 +82,12 @@ def draw_circle(x, y, z, radius, cx, cy, cz, cro, cpi, cya, width, height, fov, 
     location = project(x, y, z, cx, cy, cz, cro, cpi, cya, width, height, fov)
     if location is None:
         return
-    pygame.draw.circle(surface, (255, 255, 255), location, radius/fov*width)
+
+    radius = radius/fov*width
+    if radius < 1:
+        x, y = location
+        pygame.draw.polygon(surface, (255, 255, 255), ((x - 5, y - 5), (x - 5, y), (x, y), (x, y - 5)), 1)
+    pygame.draw.circle(surface, (255, 255, 255), location, radius)
 
 
 def draw(positions, cx, cy, cz, cro, cpi, cya, width, height, fov, surface):
@@ -94,31 +101,30 @@ def easy_animate(positions_through_time, W, H, name):
     window = setup(W, H, name)
 
     roll = 0
-    pitch = 0
+    pitch = 90
     yaw = 0
     capture = True
     clock = pygame.time.Clock()
     for positions in positions_through_time:
-        #print(positions)
-        draw(positions, 0, 0, 0, roll, pitch, yaw, W, H, 10000, window)
+        draw(positions, 0, 0, -10, roll, pitch, yaw, W, H, nbody.Nbody.AU * 10, window)
+        #draw(positions, positions[1][0], positions[1][1], -10, roll, pitch, yaw, W, H, 100000000000, window)
 
-        if capture and pygame.mouse.get_focused():
-            x, y = 0, 0#pygame.mouse.get_pos()
-            #pygame.mouse.set_pos(W / 2, H / 2)
+        if capture and pygame.mouse.get_focused() and False:
+            x, y = pygame.mouse.get_pos()
+            pygame.mouse.set_pos(W / 2, H / 2)
 
-            #dx = x - W / 2
-            #dy = y - H / 2
+            dx = x - W / 2
+            dy = y - H / 2
 
-            #pitch += dy
-            #yaw -= dx
-        #print(pitch, yaw)
+            pitch += dy
+            yaw -= dx
 
         for event in pygame.event.get():
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:
                     capture = False
 
-        clock.tick(24)
+        clock.tick(60)
 
 
 if __name__ == "__main__":  # Testing
